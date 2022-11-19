@@ -3,11 +3,14 @@ from typing import Iterable
 from fastapi.exceptions import HTTPException
 
 from .base import COVCallback, DataModule
+from .random import RandomDataModule
 
 
 class DataController:
     def __init__(self) -> None:
-        self.data_modules: dict[str, DataModule] = {}
+        self.data_modules: dict[str, DataModule] = {
+            RandomDataModule.name: RandomDataModule(),
+        }
 
     async def start(self) -> None:
         for _, data_module in self.data_modules.items():

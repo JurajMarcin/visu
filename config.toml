@@ -1,0 +1,8 @@
+# Host to bind the server to; string, default: ""
+#host = ""
+# Port of the server; int, default: 8000
+#port = 8000
+# Enable debugging output for visu code; bool, default: false
+#debug = false
+# Enable debugging output for uvicorn server; bool, default: false
+#uvicorn_debug = false

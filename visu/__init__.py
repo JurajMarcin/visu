@@ -21,6 +21,7 @@ from .data import DataController
 from .scheme import SchemesController
 
 config = parse(Config, "config.toml")
+logging.basicConfig(level=logging.DEBUG if config.debug else logging.INFO)
 
 data_controller = DataController()
 schemes_controller = SchemesController()
@@ -144,15 +145,14 @@ async def get_scheme(request: Request, scheme_id: str) -> Response:
 
 @app.get("/schemes/{scheme_id}/influx/{svg_id}")
 async def get_influx_data(scheme_id: str, svg_id: str, limit: str = "-1h"):
-    scheme = schemes_controller.get_scheme(scheme_id)
+    element = schemes_controller.get_element(scheme_id, svg_id)
     try:
         async with InfluxDBClientAsync("http://localhost:8086", "xTqv-_WsuBoWtVmsiyvH5vN7LQV4d6NLrbXZ_U_mA6woR2-KEMlpsN6MfGzS-_-3AGKYsD8onCwr_O9v938JIA==", "test") as client:
             await client.ping()
             query = client.query_api()
             result = await query.query_raw(
                 f"from(bucket: \"test2\") |> range(start: {limit}) "
-                + list(filter(lambda element: element.svg_id == svg_id,
-                              scheme.elements))[0].influx_query,
+                + element.influx_query,
             )
             return Response(result, media_type="text/csv")
     except ClientError as ex:

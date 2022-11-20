@@ -8,6 +8,7 @@ import tomli
 
 IS_DUNDER = "__is_configclass__"
 VALIDATE_DUNDER = "__configclass__validate__"
+SET_ATTRS_DUNDER = "__configclass__set_attrs__"
 
 
 TomlDict = dict[str, Any]
@@ -35,6 +36,9 @@ def _update(self: object, toml_dict: TomlDict) -> None:
                 current_list = getattr(self, key, [])
                 current_list.extend(map(item_t, value))
                 setattr(self, key, current_list)
+            elif getattr(value_t, "__origin__", None) == tuple:
+                item_t = getattr(value_t, "__args__")[0]
+                setattr(self, key, tuple(map(item_t, value)))
             elif getattr(value_t, "__origin__", None) == dict:
                 dk_t, dv_t = getattr(value_t, "__args__")
                 current_dict = getattr(self, key, {})
@@ -44,6 +48,7 @@ def _update(self: object, toml_dict: TomlDict) -> None:
                 setattr(self, key, current_dict)
             else:
                 setattr(self, key, value_t(value))
+            getattr(self, SET_ATTRS_DUNDER).add(key)
         except ConfigError as ex:
             raise ConfigError(f"{key}.{ex}") from ex
         except (KeyError, ValueError) as ex:
@@ -78,8 +83,7 @@ def parse(cls: Type[T], conf_path: str, conf_d_path: str | None = None) -> T:
 
 
 def configclass(cls: T = None, /, *,
-                validator: Callable[[T], None] | None = None) \
-        -> T:
+                validator: Callable[[T], None] | None = None) -> T:
     """
     Decorator to make the class parsable configclass, similar to dataclass
 
@@ -95,6 +99,7 @@ def configclass(cls: T = None, /, *,
         old_init = getattr(cls, "__init__")
         def _config_init(self: T, toml_dict: TomlDict | None = None,
                          *args: Any, **kwargs: Any) -> None:
+            setattr(self, SET_ATTRS_DUNDER, set())
             old_init(self, *args, **kwargs)
             if toml_dict is not None:
                 _update(self, toml_dict)
@@ -107,8 +112,16 @@ def configclass(cls: T = None, /, *,
     return _configclass if cls is None else _configclass(cls)  # type: ignore
 
 
+def configclass_set_attrs(cfg: object) -> frozenset[str]:
+    """Returns a frozenset of attributes explicitely set by parse()"""
+    if not getattr(cfg.__class__, IS_DUNDER, False):
+        raise TypeError("configclass_has_set() requires configclass instance")
+    return frozenset(getattr(cfg, SET_ATTRS_DUNDER, set()))
+
+
 __all__ = [
     "configclass",
     "parse",
+    "configclass_set_attrs",
     "ConfigError",
 ]

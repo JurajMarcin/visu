@@ -20,6 +20,7 @@ _logger = logging.getLogger(__name__)
 class SchemesController:
     """Class for managing schemes"""
     def __init__(self) -> None:
+        etree.register_namespace("", "http://www.w3.org/2000/svg")
         self._schemes: dict[str, SchemeConfig] = {}
         for scheme in parse(SchemesConfig, "schemes.toml", "schemes.d").scheme:
             if scheme.scheme_id in self._schemes:

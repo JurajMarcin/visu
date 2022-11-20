@@ -4,6 +4,7 @@ from fastapi.exceptions import HTTPException
 from tomlconfig import parse
 
 from .bacnet import BacnetDataModule, BacnetDataModuleConfig
+from .modbus import ModbusDataModule, ModbusDataModuleConfig
 from .base import COVCallback, DataModule
 from .random import RandomDataModule
 
@@ -13,6 +14,9 @@ class DataController:
         self.data_modules: dict[str, DataModule] = {
             RandomDataModule.name: RandomDataModule(),
             BacnetDataModule.name: BacnetDataModule(BacnetDataModuleConfig()),
+            ModbusDataModule.name: ModbusDataModule(
+                parse(ModbusDataModuleConfig, "modbus.toml")
+            ),
         }
 
     async def start(self) -> None:

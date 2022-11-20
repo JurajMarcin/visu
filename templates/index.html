@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Home | Vizu</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link type="text/css" href="{{ url_for('static', path='/style.css') }} " rel="stylesheet" />
+</head>
+<body class="nojs">
+
+    <header class="header">
+        <h1 class="header__title">VIZU | Fakulta Informatiky MU</h1>
+        <button id="open-nav"><span class="material-symbols-outlined">menu</span></button>
+    </header>
+
+    <nav class="nav nav-open">
+        <ul>
+            {% for scheme in schemes %}
+            <li><a href="/schemes/{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <main class="main">
+    </main>
+
+    <script src="{{ url_for('static', path='/style.js') }}"></script>
+</body>
+</html>

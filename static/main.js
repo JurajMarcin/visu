@@ -56,76 +56,53 @@ const PlotRenderer = ({ scheme_id, element }) => {
     const config = React.useMemo(() => ({ fluxResponse, layers: [lineLayer] }), [fluxResponse]);
 
     return React.createElement("div", {}, [
-        React.createElement(PlotSettings, { rangeUpdated: (range) => setRange(range), key: "graphOptions" }, null),
-        React.createElement("div", {style, key: "graph"}, React.createElement(Giraffe.Plot, {config}, null)),
+        React.createElement(PlotSettings, { rangeUpdated: (range) => setRange(range), key: "plotSettings" }, null),
+        React.createElement("div", {style, key: "plot"}, React.createElement(Giraffe.Plot, {config}, null)),
     ]);
 };
 
-// class PlotRenderer extends React.Component {
-//     render() {
-//         const style = {
-//             width: "calc(100vw - 5rem)",
-//             height: "calc(70vh - 20px)",
-//             margin: "1rem",
-//         };
-
-//         const lineLayer = {
-//             type: "line",
-//             x: "_time",
-//             y: "_value"
-//         };
-
-//         const config = {
-//             fluxResponse: this.props.fluxResponse,
-//             layers: [lineLayer]
-//         };
-
-//         const SimplePlot = React.createElement(Giraffe.Plot, {config}, null);
-//         return React.createElement('div', {style}, SimplePlot);
-//     }
-// }
-
 
 const renderValue = (dataModule, dataId, data) => {
-    const element = SCHEME_CONFIG.elements
-        .find((el) => el.data_module === dataModule && el.data_id === dataId);
-    if (!element) return;
-    const svg_element = document.querySelector(`#scheme svg #${element.svg_id}`);
-    if (!svg_element) return;
-    switch (element.type) {
-        case ELEMENT_TYPE_TEXT:
-            svg_element.innerHTML = (data instanceof Array
-                ? data.map((v) => element.map[v] ?? v) : element.map[data] ?? data).toString();
-            break;
-        case ELEMENT_TYPE_INT:
-            svg_element.innerHTML = data.toString();
-            break;
-        case ELEMENT_TYPE_FLOAT:
-            svg_element.innerHTML = (data instanceof Array
-                ? data.map((v) => Number.parseFloat(v).toFixed(element.precision))
-                : Number.parseFloat(data).toFixed(element.precision)).toString();
-            break;
-        case ELEMENT_TYPE_BOOL:
-            const value = element.true_values.find((tv) => tv.toString() === data.toString());
-            svg_element.innerHTML = value ? element.true_text : element.false_text;
-            svg_element.style.fill = value ? element.true_fill : element.false_fill;
-    }
-};
+    const element = SCHEME_CONFIG.element.find((el) => el.data_module === dataModule && el.data_id === dataId);
+    if (!element)
+        return;
+    const svgElement = document.querySelector(`#scheme svg #${element.svg_id}`);
+    if (!svgElement)
+        return;
 
+    const elementStyle = element.style.find((style) => {
+        const numData = Number.parseFloat(data);
+        if ((style.min === null && style.max === null) || numData === NaN)
+            return new RegExp(style.match).test(data)
+        if (style.min !== null && numData < style.min)
+            return false;
+        if (style.max !== null && style.max < numData)
+            return false;
+        return true;
+    });
 
-const aggregateElements = (elements)  => {
-    aggregated = {}
-    for (const element of elements) {
-        if (!aggregated[element.data_module])
-            aggregated[element.data_module] = [];
-        aggregated[element.data_module].push(element);
+    if (!elementStyle)
+        return;
+
+    if (element.type == ELEMENT_TYPE_FLOAT) {
+        const numData = Number.parseFloat(data);
+        if (numData !== NaN)
+            data = numData.toFixed(element.precision);
     }
-    return aggregated;
+
+    if (elementStyle.fill !== null)
+        svgElement.style.fill = elementStyle.fill;
+    if (elementStyle.opacity !== null)
+        svgElement.style.opacity = elementStyle.opacity;
+    if (elementStyle.style !== null)
+        svgElement.setAttribute("style", elementStyle.style);
+    if (elementStyle.text !== null)
+        svgElement.innerHTML = elementStyle.text.replace("%%", element.map[data] ?? data);
 };
 
 const showMenu = (element, socket) => {
     document.querySelector("#update-value").value = "";
-    document.querySelector("#menu").classList.remove("menu-hidden");
+    document.querySelector("#menu").classList.toggle("menu--open");
     const message = document.querySelector("#update-message");
     const oldSubmit = document.querySelector("#update-submit");
     oldSubmit.replaceWith(oldSubmit.cloneNode(true));
@@ -200,8 +177,19 @@ const showMenu = (element, socket) => {
     );
 };
 
+
+const aggregateElements = (elements)  => {
+    aggregated = {}
+    for (const element of elements) {
+        if (!aggregated[element.data_module])
+            aggregated[element.data_module] = [];
+        aggregated[element.data_module].push(element);
+    }
+    return aggregated;
+};
+
 const initialize = () => {
-    const aggregated = aggregateElements(SCHEME_CONFIG.elements);
+    const aggregated = aggregateElements(SCHEME_CONFIG.element);
     for (const dataModule of Object.keys(aggregated)) {
         const socket = new WebSocket(`${SOCKET_URL}/${dataModule}`);
         socket.addEventListener(
@@ -210,7 +198,6 @@ const initialize = () => {
         );
         socket.addEventListener("message", (ev) => {
             const msg = JSON.parse(ev.data);
-            // console.log(msg);
             if (msg.status) {
                 if (msg.status >= 400) {
                     console.error(msg);
@@ -224,27 +211,41 @@ const initialize = () => {
             }
         });
         socket.addEventListener("open", () => {
-            const cov = aggregated[dataModule]
-                .filter((element) => element.cov || SCHEME_CONFIG.cov);
-            const interval = aggregated[dataModule]
-                .filter((element) => !element.cov && !SCHEME_CONFIG.cov);
+            const cov = aggregated[dataModule].filter((element) => element.cov);
+            const interval_aggregated = aggregated[dataModule].filter((element) => !element.cov && !element.single);
+            const interval_single = aggregated[dataModule].filter((element) => !element.cov && element.single);
             socket.send(JSON.stringify({
                 command: "cov",
                 data_ids: cov.map((element) => element.data_id),
             }));
-            setInterval(() => socket.send(JSON.stringify({
-                command: "get",
-                data_ids: interval.map((element) => element.data_id),
-            })), SCHEME_CONFIG.interval * 1000);
+            setInterval(() => {
+                socket.send(JSON.stringify({
+                    command: "get",
+                    data_ids: interval_aggregated.map((element) => element.data_id),
+                }));
+                for (const single_element of interval_single) {
+                    socket.send(JSON.stringify({
+                        command: "get",
+                        data_ids: single_element.data_id,
+                    }));
+                }
+            }, SCHEME_CONFIG.interval * 1000);
         });
 
         for (const element of aggregated[dataModule]) {
-            const svg_element = document.querySelector(`#scheme svg #${element.svg_id}`);
-            svg_element.addEventListener("click", () => showMenu(element, socket));
-            svg_element.style.cursor = "pointer";
+            const svgElement = document.querySelector(`#scheme svg #${element.svg_id}`);
+            if (!svgElement)
+                continue;
+            svgElement.addEventListener("click", () => showMenu(element, socket));
+            svgElement.style.cursor = "pointer";
         }
     }
 };
+
+
+document.querySelector("#menu-close").addEventListener("click", () => {
+    document.querySelector(".menu").classList.toggle("menu--open");
+});
 
 
 initialize();

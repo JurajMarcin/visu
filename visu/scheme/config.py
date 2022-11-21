@@ -35,7 +35,7 @@ class ElementStyleConfig:
             except ValueError:
                 pass
         return self.match is not None \
-            and re.match(self.match, str(value)) is not None
+            and re.search(self.match, str(value)) is not None
 
 
 @configclass
@@ -45,7 +45,7 @@ class ElementConfig:
     data_id: str = ""
     svg_id: str = ""
     write: bool = False
-    cov: bool | None = None
+    cov: bool = False
     single: bool = False
     influx_query: str = ""
 
@@ -71,7 +71,6 @@ class SchemeConfig:
     scheme_id: str = ""
     svg_path: str = ""
     interval: int = 5
-    cov: bool = False
     element: list[ElementConfig] = field(default_factory=list)
 
 

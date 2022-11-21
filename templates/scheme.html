@@ -16,7 +16,7 @@
 
     <header class="header">
         <h1 class="header__title">VIZU | Fakulta Informatiky MU</h1>
-        <button id="open-nav"><span class="material-symbols-outlined">menu</span></button>
+        <button class="nav-button" id="nav-button"><span class="material-symbols-outlined">menu</span></button>
     </header>
 
     <nav class="nav">
@@ -28,11 +28,12 @@
     </nav>
 
     <main class="main">
-        <div id="scheme">
+        <div class="scheme" id="scheme">
             {{ svg|safe }}
         </div>
 
-        <div id="menu" class="menu menu-hidden">
+        <div id="menu" class="menu">
+            <button class="menu-close" id="menu-close"><span class="material-symbols-outlined">close</span></button>
             <h2>Update value</h2>
             <div class="menu__update">
                 <div id="update-message"></div>

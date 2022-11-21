@@ -2,6 +2,7 @@ from dataclasses import field
 import logging
 import re
 from typing import Pattern
+
 from fastapi.exceptions import HTTPException
 from pymodbus.bit_read_message import ReadCoilsResponse, ReadDiscreteInputsResponse
 from pymodbus.bit_write_message import WriteSingleCoilResponse
@@ -11,7 +12,10 @@ from pymodbus.exceptions import ModbusException
 from pymodbus.framer.rtu_framer import ModbusRtuFramer
 from pymodbus.framer.socket_framer import ModbusSocketFramer
 from pymodbus.pdu import ExceptionResponse
-from pymodbus.register_read_message import ReadHoldingRegistersResponse, ReadInputRegistersResponse
+from pymodbus.register_read_message import (
+    ReadHoldingRegistersResponse,
+    ReadInputRegistersResponse,
+)
 from pymodbus.register_write_message import WriteSingleRegisterResponse
 
 from tomlconfig import configclass
@@ -116,8 +120,8 @@ class ModbusDataModule(DataModule):
                 self._parse_data_id_read(data_id)
             if conn_id not in self._conns:
                 raise HTTPException(404, "Connection id not found")
-            _logger.debug("Read from Modbus conn=%r slave=%r addr=%r count=%r",
-                          conn_id, slave, addr, count)
+            _logger.debug("Get conn=%r slave=%r addr=%r count=%r", conn_id,
+                          slave, addr, count)
             client = _build_client(self._conns[conn_id])
             await client.connect()
             res = await {
@@ -127,6 +131,7 @@ class ModbusDataModule(DataModule):
                 "ir": client.read_input_registers,
             }[obj_type](addr, count, slave)
             if isinstance(res, ExceptionResponse):
+                _logger.error("Error: %r code: %r", res, res.exception_code)
                 raise HTTPException(500,
                                     f"Modbus error: {res} "
                                     f"code: {res.exception_code}")
@@ -137,9 +142,11 @@ class ModbusDataModule(DataModule):
                                   ReadInputRegistersResponse)):
                 value = res.registers
             else:
+                _logger.error("Invalid response from Modbus")
                 raise HTTPException(500, "Invalid response from Modbus")
             return list(map(str, value)) if count > 1 else str(value[0])
         except ModbusException as ex:
+            _logger.error("Exception: %r", ex)
             raise HTTPException(500, f"Modbus exception: {ex}") from ex
         finally:
             if client is not None:
@@ -154,8 +161,8 @@ class ModbusDataModule(DataModule):
                 raise HTTPException(400, "Cannot write multiple values")
             if conn_id not in self._conns:
                 raise HTTPException(404, "Connection id not found")
-            _logger.debug("Write from Modbus conn=%r slave=%r addr=%r value=%r",
-                          conn_id, slave, addr, value)
+            _logger.debug("Set conn=%r slave=%r addr=%r value=%r", conn_id,
+                          slave, addr, value)
             client = _build_client(self._conns[conn_id])
             await client.connect()
             if obj_type == "co":
@@ -165,6 +172,7 @@ class ModbusDataModule(DataModule):
             else:
                 assert False
             if isinstance(res, ExceptionResponse):
+                _logger.error("Error: %r code: %r", res, res.exception_code)
                 raise HTTPException(500,
                                     f"Modbus error: {res} "
                                     f"code: {res.exception_code}")
@@ -172,7 +180,11 @@ class ModbusDataModule(DataModule):
                 return str(res.value)
             if isinstance(res, WriteSingleRegisterResponse):
                 return str(res.value)
+            _logger.error("Invalid response from Modbus")
             raise HTTPException(500, "Invalid response from Modbus")
+        except ModbusException as ex:
+            _logger.error("Exception: %r", ex)
+            raise HTTPException(500, f"Modbus exception: {ex}") from ex
         except ValueError as ex:
             raise HTTPException(400, "Invalid value: {ex}") from ex
         finally:

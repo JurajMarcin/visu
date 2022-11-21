@@ -24,11 +24,16 @@ MarkupSafe==2.1.1
 mccabe==0.7.0
 multidict==6.0.2
 platformdirs==2.5.4
+ply==3.11
+pyasn1==0.4.8
+pycryptodomex==3.15.0
 pydantic==1.10.2
 pylint==2.15.6
 pymodbus==3.0.2
 pyserial==3.5
 pyserial-asyncio==0.6
+pysmi==0.3.4
+pysnmp==4.4.12
 python-dateutil==2.8.2
 python-dotenv==0.21.0
 PyYAML==6.0

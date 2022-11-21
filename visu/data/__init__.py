@@ -2,6 +2,7 @@ from typing import Iterable
 
 from fastapi.exceptions import HTTPException
 from tomlconfig import parse
+from visu.data.snmp import SNMPDataModule, SNMPDataModuleConfig
 
 from .bacnet import BacnetDataModule, BacnetDataModuleConfig
 from .modbus import ModbusDataModule, ModbusDataModuleConfig
@@ -15,8 +16,10 @@ class DataController:
             RandomDataModule.name: RandomDataModule(),
             BacnetDataModule.name: BacnetDataModule(BacnetDataModuleConfig()),
             ModbusDataModule.name: ModbusDataModule(
-                parse(ModbusDataModuleConfig, "modbus.toml")
+                parse(ModbusDataModuleConfig, "modbus.toml"),
             ),
+            SNMPDataModule.name: SNMPDataModule(parse(SNMPDataModuleConfig,
+                                                      "snmp.toml"))
         }
 
     async def start(self) -> None:

@@ -96,8 +96,13 @@ const renderValue = (dataModule, dataId, data) => {
         svgElement.style.opacity = elementStyle.opacity;
     if (elementStyle.style !== null)
         svgElement.setAttribute("style", elementStyle.style);
-    if (elementStyle.text !== null)
-        svgElement.innerHTML = elementStyle.text.replace("%%", element.map[data] ?? data);
+    if (elementStyle.text !== null) {
+        if (svgElement.children.length)
+            svgElement.children[0].innerHTML = elementStyle.text
+                .replace("%%", element.map[data] ?? data);
+        else
+            svgElement.innerHTML = elementStyle.text.replace("%%", element.map[data] ?? data);
+    }
 };
 
 const showMenu = (element, socket) => {

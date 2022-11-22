@@ -38,6 +38,8 @@ class SchemesController:
             self._schemes[scheme.scheme_id] = scheme
 
         self._resolve_templates()
+        _logger.debug("Discovered templates: %r", self._templates.keys())
+        _logger.debug("Discovered schemes: %r", self._schemes.keys())
 
     def _resolve_templates(self) -> None:
         for scheme in self._schemes.values():
@@ -102,9 +104,11 @@ class SchemesController:
         if element_style.style is not None:
             svg_element.attrib["style"] = element_style.style
         if element_style.text is not None:
-            for child in list(svg_element):
-                svg_element.remove(child)
-            svg_element.text = element_style.text.replace("%%", value)
+            children = list(svg_element)
+            if len(children) > 0:
+                children[0].text = element_style.text.replace("%%", value)
+            else:
+                svg_element.text = element_style.text.replace("%%", value)
 
 
     def _build_element(self, svg: ElementTree, element: ElementConfig,
@@ -123,7 +127,7 @@ class SchemesController:
             return
         if element.type == ElementType.FLOAT:
             try:
-                data = f"{float(data):.{element.precision}}"
+                data = f"{float(data):.{element.precision}f}"
             except (TypeError, ValueError) as ex:
                 _logger.error("Expected float value for %r in %r: %r",
                               element.svg_id, scheme_id, ex)

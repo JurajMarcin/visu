@@ -1,0 +1,8 @@
+[[conn]]
+conn_id = "conn1"
+host = "localhost"
+port = 161
+
+[conn.community_auth]
+community_name = "public"
+version = 1

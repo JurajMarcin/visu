@@ -3,6 +3,6 @@
 # Port of the server
 #port = 8000
 # Enable debugging output for visu code
-#debug = false
+#debug = true
 # Enable debugging output for uvicorn server
 #uvicorn_debug = false

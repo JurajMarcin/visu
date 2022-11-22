@@ -1,0 +1,308 @@
+[[template]]
+template = "2state"
+
+write = true
+type = "bool"
+
+[[template.style]]
+match = '^(?:[Tt]rue|1)$'
+fill = "#00AA00"
+text = ""
+
+[[template.style]]
+fill = "#AA0000"
+text = ""
+
+
+[[template]]
+template = "fan-rpm"
+
+write = true
+type = "int"
+min = 0
+max = 1000
+
+[[template.style]]
+max = 800
+fill = "#000000"
+text = "%% RPM"
+
+[[template.style]]
+max = 900
+fill = "orange"
+text = "%% RPM"
+
+[[template.style]]
+fill = "red"
+text = "%% RPM"
+
+
+[[template]]
+template = "pump-rpm"
+
+write = true
+type = "int"
+min = 0
+max = 500
+
+[[template.style]]
+max = 400
+fill = "#000000"
+text = "%% RPM"
+
+[[template.style]]
+max = 450
+fill = "orange"
+text = "%% RPM"
+
+[[template.style]]
+fill = "red"
+text = "%% RPM"
+
+
+[[template]]
+template = "dc-temp"
+
+write = false
+type = "float"
+precision = 2
+
+[[template.style]]
+max = 80
+fill = "#FFFFFF"
+text = "%% C"
+
+[[template.style]]
+max = 90
+fill = "orange"
+text = "%% C"
+
+[[template.style]]
+fill = "red"
+text = "%% C"
+
+
+
+
+[[scheme]]
+scheme_name = "Datacentre Cooling"
+scheme_id = "cooling"
+svg_path = "cooling.svg"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan1::bool"
+svg_id = "fan1"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan2::bool"
+svg_id = "fan2"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan3::bool"
+svg_id = "fan3"
+
+[[scheme.element]]
+template = "fan-rpm"
+data_module = "random"
+data_id = "fan1-rpm::int::0::1000"
+svg_id = "fan1-rpm"
+
+[[scheme.element]]
+template = "fan-rpm"
+data_module = "random"
+data_id = "fan2-rpm::int::0::1000"
+svg_id = "fan2-rpm"
+
+[[scheme.element]]
+template = "fan-rpm"
+data_module = "random"
+data_id = "fan3-rpm::int::0::1000"
+svg_id = "fan3-rpm"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan1-valve::bool"
+svg_id = "fan1-valve"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan2-valve::bool"
+svg_id = "fan2-valve"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan3-valve::bool"
+svg_id = "fan3-valve"
+
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "pump1::bool"
+svg_id = "pump1"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "pump2::bool"
+svg_id = "pump2"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "pump3::bool"
+svg_id = "pump3"
+
+[[scheme.element]]
+template = "pump-rpm"
+data_module = "random"
+data_id = "pump1-rpm::int::0::1000"
+svg_id = "pump1-rpm"
+
+[[scheme.element]]
+template = "pump-rpm"
+data_module = "random"
+data_id = "pump2-rpm::int::0::1000"
+svg_id = "pump2-rpm"
+
+[[scheme.element]]
+template = "pump-rpm"
+data_module = "random"
+data_id = "pump3-rpm::int::0::1000"
+svg_id = "pump3-rpm"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "pump1-valve::bool"
+svg_id = "pump1-valve"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "pump2-valve::bool"
+svg_id = "pump2-valve"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "pump3-valve::bool"
+svg_id = "pump3-valve"
+
+
+[[scheme.element]]
+template = "dc-temp"
+data_module = "random"
+data_id = "dc1-temp::float::60::100"
+svg_id = "dc1-temp"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc1-valve-in::bool"
+svg_id = "dc1-valve-in"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc1-valve-out::bool"
+svg_id = "dc1-valve-out"
+
+[[scheme.element]]
+template = "dc-temp"
+data_module = "random"
+data_id = "dc2-temp::float::60::100"
+svg_id = "dc2-temp"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc2-valve-in::bool"
+svg_id = "dc2-valve-in"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc2-valve-out::bool"
+svg_id = "dc2-valve-out"
+
+[[scheme.element]]
+template = "dc-temp"
+data_module = "random"
+data_id = "dc3-temp::float::60::100"
+svg_id = "dc3-temp"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc3-valve-in::bool"
+svg_id = "dc3-valve-in"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc3-valve-out::bool"
+svg_id = "dc3-valve-out"
+
+[[scheme.element]]
+template = "dc-temp"
+data_module = "random"
+data_id = "dc4-temp::float::60::100"
+svg_id = "dc4-temp"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc4-valve-in::bool"
+svg_id = "dc4-valve-in"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc4-valve-out::bool"
+svg_id = "dc4-valve-out"
+
+[[scheme.element]]
+template = "dc-temp"
+data_module = "random"
+data_id = "dc5-temp::float::60::100"
+svg_id = "dc5-temp"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc5-valve-in::bool"
+svg_id = "dc5-valve-in"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc5-valve-out::bool"
+svg_id = "dc5-valve-out"
+
+[[scheme.element]]
+template = "dc-temp"
+data_module = "random"
+data_id = "dc6-temp::float::60::100"
+svg_id = "dc6-temp"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc6-valve-in::bool"
+svg_id = "dc6-valve-in"
+
+[[scheme.element]]
+template = "2state"
+data_module = "random"
+data_id = "dc6-valve-out::bool"
+svg_id = "dc6-valve-out"

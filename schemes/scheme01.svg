@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 297 210"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="scheme01.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.0045143"
+     inkscape:cx="559.48715"
+     inkscape:cy="392.36437"
+     inkscape:window-width="2560"
+     inkscape:window-height="1388"
+     inkscape:window-x="0"
+     inkscape:window-y="52"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="737.17711"
+       y="426.58326"
+       width="233.26758"
+       height="48.973304"
+       id="rect1083" />
+    <rect
+       x="143.0536"
+       y="426.58326"
+       width="230.69004"
+       height="46.395762"
+       id="rect1077" />
+    <rect
+       x="743.62096"
+       y="-91.502753"
+       width="203.62584"
+       height="36.085593"
+       id="rect1071" />
+    <rect
+       x="177.85042"
+       y="109.54555"
+       width="189.44936"
+       height="36.085593"
+       id="rect1065" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.565"
+       id="rect111"
+       width="73.653275"
+       height="20.459242"
+       x="35.462685"
+       y="23.528128" />
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.565"
+       id="rect111-3"
+       width="73.653275"
+       height="20.459242"
+       x="33.416763"
+       y="162.99196" />
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.565"
+       id="rect111-3-6"
+       width="73.653275"
+       height="20.459242"
+       x="187.54305"
+       y="24.210106" />
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.565"
+       id="rect111-3-7"
+       width="73.653275"
+       height="20.459242"
+       x="188.56601"
+       y="163.67393" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.565"
+       d="M 71.266359,43.646383 C 70.584385,163.67394 84.22388,162.30999 84.22388,162.30999 l 104.34213,1.02296 -1.36395,-119.004593 -78.76808,-21.141216"
+       id="path332" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text1063"
+       style="white-space:pre;shape-inside:url(#rect1065);display:inline;fill:#000000"
+       inkscape:transform-center-x="4.0243724"
+       inkscape:transform-center-y="-1.7153062" />
+    <rect
+       style="fill:#000000;stroke-width:0.499999;fill:#FF0000"
+       id="bool-valve"
+       width="12.923595"
+       height="7.2220097"
+       x="55.875546"
+       y="29.268143" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="43.522106"
+       y="34.019463"
+       id="text1068"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.5"
+         x="43.522106"
+         y="34.019463"
+         id="tspan1070">Valve1:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="197.65498"
+       y="35.159782"
+       id="text1106"><tspan
+         sodipodi:role="line"
+         id="tspan1104"
+         style="stroke-width:0.5"
+         x="197.65498"
+         y="35.159782">Temperature</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="201.83617"
+       y="174.27847"
+       id="text1110"><tspan
+         sodipodi:role="line"
+         id="tspan1108"
+         style="stroke-width:0.5"
+         x="201.83617"
+         y="174.27847">Setting:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="214.5697"
+       y="174.08844"
+       id="str-setting"><tspan
+         sodipodi:role="line"
+         id="tspan1112"
+         style="stroke-width:0.5"
+         x="214.5697"
+         y="174.08844">Loremj</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="51.124222"
+       y="173.51828"
+       id="text1118"><tspan
+         sodipodi:role="line"
+         id="tspan1116"
+         style="stroke-width:0.5"
+         x="51.124222"
+         y="173.51828">Angle: </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="62.337345"
+       y="173.70833"
+       id="float-angle"><tspan
+         sodipodi:role="line"
+         id="tspan1120"
+         style="stroke-width:0.5"
+         x="62.337345"
+         y="173.70833">2.6</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:#000000;stroke-width:0.499999"
+       x="219.24159"
+       y="34.97834"
+       id="int-temp"><tspan
+         sodipodi:role="line"
+         id="tspan518"
+         style="stroke-width:0.5"
+         x="219.24159"
+         y="34.97834">42</tspan></text>
+  </g>
+</svg>

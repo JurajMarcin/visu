@@ -68,7 +68,7 @@ def parse(cls: Type[T], conf_path: str, conf_d_path: str | None = None) -> T:
             _update(self, tomli.load(file))
         if conf_d_path:
             for file_path in os.listdir(conf_d_path):
-                with open(file_path, "rb") as file:
+                with open(os.path.join(conf_d_path, file_path), "rb") as file:
                     _update(self, tomli.load(file))
         validator = getattr(self, VALIDATE_DUNDER, None)
         if validator is not None:

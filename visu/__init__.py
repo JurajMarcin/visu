@@ -20,8 +20,8 @@ from .config import Config
 from .data import DataController
 from .scheme import SchemesController
 
-config = parse(Config, "config.toml")
-logging.basicConfig(level=logging.DEBUG if config.debug else logging.INFO)
+visu_config = parse(Config, "config.toml")
+logging.basicConfig(level=logging.DEBUG if visu_config.debug else logging.INFO)
 
 data_controller = DataController()
 schemes_controller = SchemesController()
@@ -147,12 +147,14 @@ async def get_scheme(request: Request, scheme_id: str) -> Response:
 async def get_influx_data(scheme_id: str, svg_id: str, limit: str = "-1h"):
     element = schemes_controller.get_element(scheme_id, svg_id)
     try:
-        async with InfluxDBClientAsync("http://localhost:8086", "xTqv-_WsuBoWtVmsiyvH5vN7LQV4d6NLrbXZ_U_mA6woR2-KEMlpsN6MfGzS-_-3AGKYsD8onCwr_O9v938JIA==", "test") as client:
+        async with InfluxDBClientAsync(visu_config.influxdb_url,
+                                       visu_config.influxdb_token,
+                                       visu_config.influxdb_org) as client:
             await client.ping()
             query = client.query_api()
             result = await query.query_raw(
-                f"from(bucket: \"test2\") |> range(start: {limit}) "
-                + element.influx_query,
+                f"from(bucket: \"{visu_config.influxdb_bucket}\") "
+                f"|> range(start: {limit}) {element.influx_query}"
             )
             return Response(result, media_type="text/csv")
     except ClientError as ex:

@@ -3,6 +3,9 @@ template = "2state"
 
 write = true
 type = "bool"
+influx_query = """\
+|> filter(fn: (r) => r["_measurement"] == "go_memstats_alloc_bytes") \
+"""
 
 [[template.style]]
 match = '^(?:[Tt]rue|1)$'
@@ -21,6 +24,9 @@ write = true
 type = "int"
 min = 0
 max = 1000
+influx_query = """\
+|> filter(fn: (r) => r["_measurement"] == "go_memstats_alloc_bytes") \
+"""
 
 [[template.style]]
 max = 800
@@ -44,6 +50,9 @@ write = true
 type = "int"
 min = 0
 max = 500
+influx_query = """\
+|> filter(fn: (r) => r["_measurement"] == "go_memstats_alloc_bytes") \
+"""
 
 [[template.style]]
 max = 400
@@ -66,6 +75,9 @@ template = "dc-temp"
 write = false
 type = "float"
 precision = 2
+influx_query = """\
+|> filter(fn: (r) => r["_measurement"] == "go_memstats_alloc_bytes") \
+"""
 
 [[template.style]]
 max = 80

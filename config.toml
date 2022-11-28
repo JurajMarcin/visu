@@ -6,3 +6,7 @@
 #debug = true
 # Enable debugging output for uvicorn server
 #uvicorn_debug = false
+influxdb_url = "http://localhost:8086"
+influxdb_token = "xTqv-_WsuBoWtVmsiyvH5vN7LQV4d6NLrbXZ_U_mA6woR2-KEMlpsN6MfGzS-_-3AGKYsD8onCwr_O9v938JIA=="
+influxdb_org = "test"
+influxdb_bucket = "test"

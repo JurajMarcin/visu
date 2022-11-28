@@ -39,6 +39,9 @@ def _update(self: object, toml_dict: TomlDict) -> None:
             elif getattr(value_t, "__origin__", None) == tuple:
                 item_t = getattr(value_t, "__args__")[0]
                 setattr(self, key, tuple(map(item_t, value)))
+            elif getattr(value_t, "__origin__", None) == set:
+                item_t = getattr(value_t, "__args__")[0]
+                setattr(self, key, set(map(item_t, value)))
             elif getattr(value_t, "__origin__", None) == dict:
                 dk_t, dv_t = getattr(value_t, "__args__")
                 current_dict = getattr(self, key, {})

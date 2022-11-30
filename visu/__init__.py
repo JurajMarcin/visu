@@ -43,7 +43,7 @@ async def shutdown_event() -> None:
 
 @app.get("/data/{module}")
 async def get_data(module: str,
-                    data_id: list[str] | None = cast(None, Query(None))) \
+                   data_id: list[str] | None = cast(None, Query(None))) \
         -> dict[str, str | list[str]]:
     if data_id is None or len(data_id) == 0:
         raise HTTPException(400, "No id to get")
@@ -87,7 +87,7 @@ async def data_websocket(websocket: WebSocket, module: str) -> None:
                         callback_id = token_urlsafe(8)
                         async def callback(data_id: str,
                                            value: str | list[str]) -> None:
-                            await websocket.send_json({ data_id: value })
+                            await websocket.send_json({data_id: value})
                         callbacks.append((data_id, id(callback)))
                         if await data_controller.register_cov(module, data_id,
                                                               id(callback),

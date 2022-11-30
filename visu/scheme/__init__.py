@@ -10,7 +10,14 @@ from fastapi.exceptions import HTTPException
 from tomlconfig import ConfigError, configclass_set_attrs, parse
 
 from ..data import DataController
-from .config import ElementConfig, ElementStyleConfig, ElementType, SchemeConfig, SchemesConfig
+from .config import (
+    ElementConfig,
+    ElementGroupTemplateConfig,
+    ElementStyleConfig,
+    ElementType,
+    SchemeConfig,
+    SchemesConfig,
+)
 
 
 _logger = logging.getLogger(__name__)
@@ -18,6 +25,7 @@ _logger = logging.getLogger(__name__)
 
 class SchemesController:
     """Class for managing schemes"""
+
     def __init__(self) -> None:
         etree.register_namespace("", "http://www.w3.org/2000/svg")
         schemes_config = parse(SchemesConfig, "schemes.toml", "schemes.d")
@@ -31,15 +39,94 @@ class SchemesController:
                                   f"{template.template}")
             self._templates[template.template] = template
 
+        self._groups: dict[str, ElementGroupTemplateConfig] = {}
+        for group in schemes_config.group:
+            if group.group_name in self._groups:
+                raise ConfigError(f"Duplicate group name {group.group_name}")
+            self._groups[group.group_name] = group
+
         self._schemes: dict[str, SchemeConfig] = {}
         for scheme in schemes_config.scheme:
             if scheme.scheme_id in self._schemes:
                 raise ConfigError(f"Duplicate scheme id {scheme.scheme_id}")
             self._schemes[scheme.scheme_id] = scheme
 
+        self._resolve_groups()
         self._resolve_templates()
+        _logger.debug("Discovered groups: %r", self._groups.keys())
         _logger.debug("Discovered templates: %r", self._templates.keys())
         _logger.debug("Discovered schemes: %r", self._schemes.keys())
+
+    def _str_resolve_variables(self, string: str,
+                               variables: dict[str, str]) -> str:
+        try:
+            return string.format(**variables)
+        except KeyError as ex:
+            raise ConfigError(f"Unknown variable '{ex.args[0]}' in "
+                              f"'{string}'") from ex
+
+    def _style_resolve_variables(self, style: ElementStyleConfig,
+                                 variables: dict[str, str]) \
+            -> ElementStyleConfig:
+        new_style = ElementStyleConfig()
+        new_style.match = self._str_resolve_variables(style.match, variables)
+        new_style.min = style.min
+        new_style.max = style.max
+
+        new_style.fill = None if style.fill is None else \
+            self._str_resolve_variables(style.fill, variables)
+        new_style.opacity = style.opacity
+        new_style.style = None if style.style is None else \
+            self._str_resolve_variables(style.style, variables)
+        new_style.text = self._str_resolve_variables(style.text, variables)
+        return new_style
+
+    def _element_resolve_variables(self, element: ElementConfig,
+                                   variables: dict[str, str]) -> ElementConfig:
+        new_element = ElementConfig()
+        new_element.template = None if element.template is None else \
+            self._str_resolve_variables(element.template, variables)
+        new_element.data_module = \
+            self._str_resolve_variables(element.data_module, variables)
+        new_element.data_id = \
+            self._str_resolve_variables(element.data_id, variables)
+        new_element.svg_id = self._str_resolve_variables(element.svg_id,
+                                                         variables)
+        new_element.write = element.write
+        new_element.cov = element.cov
+        new_element.single = element.single
+        new_element.influx_query = self._str_resolve_variables(
+            element.influx_query, variables,
+        )
+
+        new_element.type = element.type
+        new_element.match = None if element.match is None else \
+            self._str_resolve_variables(element.match, variables)
+        new_element.min = element.min
+        new_element.max = element.max
+
+        new_element.map = {
+            self._str_resolve_variables(k, variables):
+            self._str_resolve_variables(v, variables)
+            for k, v in element.map.items()
+        }
+        new_element.precision = element.precision
+        new_element.style = tuple(self._style_resolve_variables(style,
+                                                                variables)
+                                  for style in element.style)
+        return new_element
+
+    def _resolve_groups(self) -> None:
+        for scheme in self._schemes.values():
+            for group in scheme.group:
+                if group.group_name not in self._groups:
+                    raise ConfigError(f"Group '{group.group_name}' not found, "
+                                      f"required by group in "
+                                      f"{scheme.scheme_id}")
+                for element in self._groups[group.group_name].element:
+                    scheme.element.append(self._element_resolve_variables(
+                        element, group.variables,
+                    ))
 
     def _resolve_templates(self) -> None:
         for scheme in self._schemes.values():
@@ -55,7 +142,6 @@ class SchemesController:
                 for attr in configclass_set_attrs(template):
                     if attr not in explicit_attrs:
                         setattr(element, attr, getattr(template, attr))
-
 
     def get_schemes(self) -> Iterable[SchemeConfig]:
         """Returns a list of configured schemes"""
@@ -110,7 +196,6 @@ class SchemesController:
             else:
                 svg_element.text = element_style.text.replace("%%", value)
 
-
     def _build_element(self, svg: ElementTree, element: ElementConfig,
                        data: str, scheme_id: str) -> None:
         svg_elements = svg.findall(f"//*[@id='{element.svg_id}']")
@@ -136,7 +221,7 @@ class SchemesController:
                           element.map.get(data, data))
 
     async def build_svg(self, scheme_id: str,
-                         data_controller: DataController) -> str:
+                        data_controller: DataController) -> str:
         """
         Builds the final SVG of scheme with scheme_id SVG XML using values
         retrieved from data_controller.
@@ -154,11 +239,11 @@ class SchemesController:
             raise HTTPException(500, "Could not load scheme SVG") from ex
         aggr_elements = self._aggregate_elements(scheme.element)
 
-        data_tasks = map(lambda data_module: \
-                            data_controller.get_values(data_module, map(
-                                lambda element: element.data_id,
-                                aggr_elements[data_module],
-                            )),
+        data_tasks = map(lambda data_module:
+                         data_controller.get_values(data_module, map(
+                             lambda element: element.data_id,
+                             aggr_elements[data_module],
+                         )),
                          aggr_elements.keys())
 
         data = await asyncio.gather(*data_tasks)

@@ -112,7 +112,7 @@ class BacnetDataModule(DataModule):
             raise HTTPException(500, "Bacnet device timeout") from ex
 
     def _build_read_multiple_requests(self, data_ids: Iterable[str]) \
-                -> Iterable[ReadPropertyMultipleRequest]:
+            -> Iterable[ReadPropertyMultipleRequest]:
         try:
             requests: dict[Address,
                            dict[ObjectIdentifier,
@@ -136,8 +136,7 @@ class BacnetDataModule(DataModule):
                     listOfReadAccessSpecs=list(map(
                         lambda object_identifier: ReadAccessSpecification(
                             objectIdentifier=object_identifier,
-                            listOfPropertyReferences=
-                                requests[address][object_identifier]
+                            listOfPropertyReferences=requests[address][object_identifier]
                         ),
                         requests[address],
                     )),
@@ -251,7 +250,7 @@ class BacnetDataModule(DataModule):
             result = await wait_for(future, self.config.timeout)
             if not result:
                 return False
-            self.cov_requests[did] = (task, { callback_id: callback })
+            self.cov_requests[did] = (task, {callback_id: callback})
             return True
         except TimeoutError as ex:
             raise HTTPException(500, "Bacnet device timeout") from ex

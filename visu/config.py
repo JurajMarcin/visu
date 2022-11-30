@@ -1,8 +1,9 @@
 from tomlconfig import configclass
 
+
 @configclass
 class Config:
-    host: str = ""
+    host: str = "0.0.0.0"
     port: int = 8000
     debug: bool = False
     uvicorn_debug: bool = False

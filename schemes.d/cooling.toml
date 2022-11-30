@@ -94,6 +94,27 @@ fill = "red"
 text = "%% C"
 
 
+[[group]]
+group_name = "fan"
+
+[[group.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan{n}::bool"
+svg_id = "fan{n}"
+
+[[group.element]]
+template = "fan-rpm"
+data_module = "random"
+data_id = "fan{n}-rpm::int::0::1000"
+svg_id = "fan{n}-rpm"
+
+[[group.element]]
+template = "2state"
+data_module = "random"
+data_id = "fan{n}-valve::bool"
+svg_id = "fan{n}-valve"
+
 
 
 [[scheme]]
@@ -101,59 +122,18 @@ scheme_name = "Datacentre Cooling"
 scheme_id = "cooling"
 svg_path = "cooling.svg"
 
-[[scheme.element]]
-template = "2state"
-data_module = "random"
-data_id = "fan1::bool"
-svg_id = "fan1"
 
-[[scheme.element]]
-template = "2state"
-data_module = "random"
-data_id = "fan2::bool"
-svg_id = "fan2"
+[[scheme.group]]
+group_name = "fan"
+variables = { n = "1" }
 
-[[scheme.element]]
-template = "2state"
-data_module = "random"
-data_id = "fan3::bool"
-svg_id = "fan3"
+[[scheme.group]]
+group_name = "fan"
+variables = { n = "2" }
 
-[[scheme.element]]
-template = "fan-rpm"
-data_module = "random"
-data_id = "fan1-rpm::int::0::1000"
-svg_id = "fan1-rpm"
-
-[[scheme.element]]
-template = "fan-rpm"
-data_module = "random"
-data_id = "fan2-rpm::int::0::1000"
-svg_id = "fan2-rpm"
-
-[[scheme.element]]
-template = "fan-rpm"
-data_module = "random"
-data_id = "fan3-rpm::int::0::1000"
-svg_id = "fan3-rpm"
-
-[[scheme.element]]
-template = "2state"
-data_module = "random"
-data_id = "fan1-valve::bool"
-svg_id = "fan1-valve"
-
-[[scheme.element]]
-template = "2state"
-data_module = "random"
-data_id = "fan2-valve::bool"
-svg_id = "fan2-valve"
-
-[[scheme.element]]
-template = "2state"
-data_module = "random"
-data_id = "fan3-valve::bool"
-svg_id = "fan3-valve"
+[[scheme.group]]
+group_name = "fan"
+variables = { n = "3" }
 
 
 [[scheme.element]]

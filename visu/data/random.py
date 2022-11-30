@@ -53,7 +53,7 @@ class RandomDataModule(DataModule):
 
     async def set_value(self, data_id: str, value: str) -> str | None:
         _logger.debug("set %r=%r", data_id, value)
-        name, _, _, _= self._parse_data_id(data_id)
+        name, _, _, _ = self._parse_data_id(data_id)
         self.values[name] = time(), value
         if id in self.cov_requests:
             await self.call_covs(data_id, value,

@@ -59,10 +59,21 @@ class ElementConfig:
     style: tuple[ElementStyleConfig, ...] = \
         field(default_factory=lambda: (ElementStyleConfig(),))
 
-
     def get_style_match(self, value: str) -> ElementStyleConfig | None:
         return next((style for style in self.style
                      if style.value_matches(value)), None)
+
+
+@configclass
+class ElementGroupTemplateConfig:
+    group_name: str = ""
+    element: tuple[ElementConfig] = field(default_factory=tuple)
+
+
+@configclass
+class ElementGroupConfig:
+    group_name: str = ""
+    variables: dict[str, str] = field(default_factory=dict)
 
 
 @configclass
@@ -72,9 +83,11 @@ class SchemeConfig:
     svg_path: str = ""
     interval: int = 5
     element: list[ElementConfig] = field(default_factory=list)
+    group: list[ElementGroupConfig] = field(default_factory=list)
 
 
 @configclass
 class SchemesConfig:
     scheme: list[SchemeConfig] = field(default_factory=list)
     template: list[ElementConfig] = field(default_factory=list)
+    group: list[ElementGroupTemplateConfig] = field(default_factory=list)

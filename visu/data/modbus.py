@@ -93,7 +93,7 @@ class ModbusDataModule(DataModule):
     name = "modbus"
 
     def __init__(self, config: ModbusDataModuleConfig) -> None:
-        self._conns = { conn.conn_id: conn for conn in config.conn }
+        self._conns = {conn.conn_id: conn for conn in config.conn}
 
     def _parse_data_id(self, data_id: str, data_id_re: Pattern[str]) \
             -> tuple[str, int, str, int, int]:

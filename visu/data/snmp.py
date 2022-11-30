@@ -95,7 +95,6 @@ class SNMPPrivProtocol(Enum):
         assert False
 
 
-
 @configclass
 class SNMPUsm:
     username: str = ""
@@ -117,7 +116,6 @@ class SNMPConnection:
     ipv6: bool = False
     community_auth: SNMPCommunity | None = None
     usm_auth: SNMPUsm | None = None
-
 
 
 @configclass

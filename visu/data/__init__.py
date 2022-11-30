@@ -38,7 +38,7 @@ class DataController:
         if len(data_ids) == 1:
             return {
                 data_ids[0]: await self.data_modules[data_module]
-                    .get_value(data_ids[0]),
+                .get_value(data_ids[0]),
             }
         return await self.data_modules[data_module] \
             .get_value_multiple(data_ids)
@@ -51,7 +51,7 @@ class DataController:
             data_id, value = list(data.items())[0]
             return {
                 data_id: await self.data_modules[data_module]
-                    .set_value(data_id, value),
+                .set_value(data_id, value),
             }
         return await self.data_modules[data_module] \
             .set_value_multiple(data.items())

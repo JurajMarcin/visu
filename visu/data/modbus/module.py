@@ -1,4 +1,3 @@
-from dataclasses import field
 import logging
 import re
 from typing import Pattern
@@ -7,8 +6,8 @@ from fastapi.exceptions import HTTPException
 from pymodbus.bit_read_message import ReadCoilsResponse, ReadDiscreteInputsResponse
 from pymodbus.bit_write_message import WriteSingleCoilResponse
 from pymodbus.client import AsyncModbusSerialClient, AsyncModbusTcpClient
-from pymodbus.constants import Defaults
 from pymodbus.exceptions import ModbusException
+from pymodbus.framer.ascii_framer import ModbusAsciiFramer
 from pymodbus.framer.rtu_framer import ModbusRtuFramer
 from pymodbus.framer.socket_framer import ModbusSocketFramer
 from pymodbus.pdu import ExceptionResponse
@@ -18,9 +17,8 @@ from pymodbus.register_read_message import (
 )
 from pymodbus.register_write_message import WriteSingleRegisterResponse
 
-from tomlconfig import configclass
-
-from .base import DataModule, DataModuleConfig
+from ..base import DataModule
+from .config import ModbusConnectionConfig, ModbusDataModuleConfig
 
 
 _DATA_ID_RD_RE = re.compile(r"^(?P<conn_id>\w+)"
@@ -34,42 +32,11 @@ _DATA_ID_WR_RE = re.compile(r"^(?P<conn_id>\w+)"
 _logger = logging.getLogger(__name__)
 
 
-@configclass
-class ModbusConnectionSerial:
-    port: str = ""
-    ascii: bool = False
-    baudrate: int = Defaults.Baudrate
-    bytesize: int = Defaults.Bytesize
-    parity: str = Defaults.Parity
-    stopbits: int = Defaults.Stopbits
-
-
-@configclass
-class ModbusConnectionTCP:
-    host: str = ""
-    port: int = 502
-    rtu: bool = False
-
-
-@configclass
-class ModbusConnection:
-    conn_id: str = ""
-    timout: int = Defaults.Timeout
-    retries: int = Defaults.Retries
-    tcp: ModbusConnectionTCP | None = None
-    serial: ModbusConnectionSerial | None = None
-
-
-@configclass
-class ModbusDataModuleConfig(DataModuleConfig):
-    conn: list[ModbusConnection] = field(default_factory=list)
-
-
-def _build_client(config: ModbusConnection) \
+def _build_client(config: ModbusConnectionConfig) \
         -> AsyncModbusTcpClient | AsyncModbusSerialClient:
     if config.tcp is not None:
         return AsyncModbusTcpClient(
-            config.tcp.host,
+            config.tcp.address,
             config.tcp.port,
             ModbusRtuFramer if config.tcp.rtu else ModbusSocketFramer,
             timeout=config.timout,
@@ -85,6 +52,7 @@ def _build_client(config: ModbusConnection) \
             config.serial.stopbits,
             timeout=config.timout,
             retries=config.retries,
+            handle_local_echo=config.serial.handle_local_echo,
         )
     assert False
 

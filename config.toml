@@ -1,12 +1,401 @@
-# Host to bind the server to
-#host = ""
-# Port of the server
+# ============== #
+# Server options #
+# ============== #
+
+## Address the HTTP server binds to
+##: str
+#host = "0.0.0.0"
+## Port the HTTP server binds to
+##: int
 #port = 8000
-# Enable debugging output for visu code
-#debug = true
-# Enable debugging output for uvicorn server
+## Enable debugging output for visu module
+##: bool
+#debug = false
+## Enable debugging output for uvicorn server
+##: bool
 #uvicorn_debug = false
-influxdb_url = "http://localhost:8086"
-influxdb_token = "xTqv-_WsuBoWtVmsiyvH5vN7LQV4d6NLrbXZ_U_mA6woR2-KEMlpsN6MfGzS-_-3AGKYsD8onCwr_O9v938JIA=="
-influxdb_org = "test"
-influxdb_bucket = "test"
+## Global SVG schemes directory
+##: str
+#schemes_dir = "/etc/visu/schemes"
+
+
+# =============== #
+# InxluxDB client #
+# =============== #
+
+#[influx_db]
+#    # Url on which InfluxDB Server is accessible
+#    #: str
+#    url = ""
+#    # InfluxDB access token
+#    #: str
+#    token = ""
+#    # InfluxDB organization name
+#    #: str
+#    org = ""
+#    # InfluxDB bucket to load data from
+#    #: str
+#    bucket = ""
+
+
+# ================== #
+# BACnet data module #
+# ================== #
+
+# == Scheme data module id ==
+#
+# bacnet
+
+# == Scheme data id == #
+#
+# BACnet devices are addressed in schemes with this string in this format:
+#
+#   address::objectType:objectInstanceNumber::propertyIdentifier
+#
+# For example for reading presentValue from an analogValue#1 on device with
+# address 192.168.120.3, the data_id looks like this:
+#
+#   192.168.120.3::analogValue:1::presentValue
+
+#[bacnet]
+#    # Unique device name
+#    #: str
+#    device_name = "visu"
+#    # Unique device identifier
+#    #: int (0 - 4194303)
+#    device_identifier = 12
+#    # Address of the device including network mask
+#    #: str
+#    address = ""
+#    # Number of the BACnet network this device is on
+#    #: int (1 - 65534)
+#    network_number = 2000
+#    # Maximum message size on the network
+#    #: int (> 50)
+#    max_apdu_length_accepted = 1024
+#    # Allow sefgmentation of larger messages
+#    #: str
+#    segmentation_supported = "segmentedBoth"
+#    # How this device should identify
+#    #: int (>= 0)
+#    vendor_identifier = 555
+#    # CoV Request lifetime in seconds
+#    #: int
+#    cov_lifetime = 300
+#    # Request timeout in seconds
+#    #: int
+#    timeout = 10
+
+
+# ================== #
+# Modbus data module #
+# ================== #
+
+# == Scheme data module id ==
+#
+# modbus
+
+# == Scheme data id == #
+#
+# Modbus devices are addressed in schemes with this string in this format:
+#
+#   conn_id::slave::objType:address[::count]
+#
+# where objType is one of "co" (coils, rw), "di" (discrete inputs, ro),
+# "hr" (holding registers, rw), "ir" (input registers, ro) and count is
+# optional, defaults to 1 if not defined
+#
+# For example for reading 3 coils from address 42 on device with slave number 4
+# on connection named "foo", the data_id looks like this:
+#
+#   foo::4::co:42::3
+
+## Modbus connection, multiple can be specified
+#[[modbus.conn]]
+#    # Connection id used in schemes
+#    #: str
+#    conn_id = ""
+#    # Timout of the Modbus client in seconds
+#    #: int
+#    timout = 3
+#    # Number of retries the client should try before failing
+#    #: int
+#    retries = 3
+
+#    # TCP connection options
+#    [modbus.conn.tcp]
+#        # Address of the target Modbus device
+#        #: str
+#        address = ""
+#        # Modbus port on the target device
+#        #: int
+#        port = 502
+#        # Use RTU over TCP
+#        #: bool
+#        rtu = false
+
+#    # Serial connection options
+#    # If both TCP and Serial are defined, TCP connection is used
+#    [modbus.conn.serial]
+#        # Serial port path
+#        #: str
+#        port = ""
+#        # Use ASCII transmission
+#        #: bool
+#        ascii = false
+#        # Number of bits per second
+#        #: int
+#        baudrate = 19200
+#        # Number of bits per byte
+#        #: int (7 - 8)
+#        bytesize = 8
+#        # Parity bit
+#        #: str ("E"ven, "O"dd, "N"one)
+#        parity = "N"
+#        # Number of stopbits
+#        #: int (0 - 2)
+#        stopbits = 1
+#        # Discard local echo
+#        #: bool
+#        handle_local_echo = false
+
+
+# ================ #
+# SNMP data module #
+# ================ #
+
+# == Scheme data module id ==
+#
+# snmp
+
+# == Scheme data id == #
+#
+# SNMP devices are addressed in schemes with this string in this format:
+#
+#   conn_id::snmpOID
+#
+# where snmpOID can be:
+#   - OID in dot-separated integers form
+#   - MIB variable in dot-separated labels form
+#   - MIB name followed by variable name and then followed by an arbitrary
+#     number of variable instance identifications all separated by "::", if only
+#     name is speficied, first variable in MIB is assumed
+#
+# Examples with connection named "foo":
+#
+#   foo::1.3.6.1.2.1.1.1.0
+#   foo::iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0
+#   foo::SNMPv2-MIB::system
+#   foo::SNMPv2-MIB::sysDescr::0
+#   foo::IP-MIB::ipAdEntAddr::127.0.0.1::123
+
+## SNMP connection options, multiple can be specified
+#[[snmp.conn]]
+#    # Connection id used in schemes
+#    #: str
+#    conn_id = ""
+#    # Address of the target device running SNMP
+#    #: str
+#    address = ""
+#    # SNMP port on the target device
+#    #: int
+#    port = 161
+#    # Command timeout in seconds
+#    #: int
+#    timeout = 1
+#    # Number of retries before failing
+#    #: int
+#    retries = 5
+#    # Use IPv6 instead of IPv4
+#    #: bool
+#    ipv6 = false
+
+#    # SNMP community authentication
+#    [snmp.conn.community_auth]
+#        # SNMP community name
+#        #: str
+#        community_name = ""
+#        # SNMP version
+#        #: int (0 = SNMP v1; 1 = SNMP v2c)
+#        version = 0
+
+#    # SNMP USM authentication
+#    # If both authentication schemes are specified, community authentication is used
+#    [snmp.conn.usm_auth]
+#        # SNMP USM username
+#        #: str
+#        username = ""
+#        # SNMP USM authentication key
+#        #: str
+#        #auth_key =
+#        # Load auth_key from file on start
+#        #: str
+#        #auth_key_file =
+#        # SNMP USM secret encryption key
+#        #: str
+#        #priv_key =
+#        # Load priv_key from file on start
+#        #: str
+#        #priv_key_file =
+#        # Authentication protocol used
+#        # If auth_key is set "HMACMD5" is default, otherwise "no"
+#        #: str ("no", "HMACMD5", "HMACSHA", "HMAC128SHA224", "HMAC192SHA256", "HMAC256SHA384", "HMAC384SHA512")
+#        #auth_protocol =
+#        # Encryption protocol used
+#        # If priv_key is set "DES" is default, otherwise "no"
+#        #: str ("no", "DES", "3DESEDE", "AesCfb128", "AesCfb192", "AesCfb256")
+#        #priv_protocol =
+
+
+# ======================== #
+# Scheme element templates #
+# ======================== #
+
+## Example scheme element template, multiple can be specified
+#[[scheme_element_template]]
+#    # Template name
+#    #: str
+#    template = ""
+#    # Data module id
+#    # See sections defining data module options for possible values
+#    #: str
+#    data_module = ""
+#    # Value id within the data module
+#    # See sections defining data module options for possible values
+#    #: str
+#    data_id = ""
+#    # Element id in the SVG
+#    #: str
+#    svg_id = ""
+#    # Allow user to update the value
+#    #: bool
+#    write = false
+#    # Use change of value notifications if they are supported
+#    #: bool
+#    cov = false
+#    # Read using a single request, do not aggregate to read multiple
+#    #: bool
+#    single = false
+#    # InfluxDB query for historical value graphs
+#    #: str
+#    influx_query = ""
+
+#    # Element type
+#    #: str ("text", "int", "float", "bool")
+#    type = "text"
+#    # Validate user input value with reglar expression
+#    # Not checked if unset
+#    #: str
+#    #match =
+#    # Validate user input value with minimum value
+#    # Not checked if unset
+#    #: float
+#    #min =
+#    # Validate user input value with maximum value
+#    # Not checked if unset
+#    #: float
+#    #max =
+
+#    # Map values before showing them
+#    # Unmapped values are shown as received
+#    #: dict[str, str]
+#    map = { }
+#    # Round floating point value to precision
+#    #: int
+#    precision = 4
+
+#    # Example style, multiple can be defined
+#    # Style is used if the value is in range or the regular expression matches
+#    # if the range is unset
+#    [[scheme_element_template.style]]
+#        # Match with regular expression
+#        #: str
+#        match = ".*"
+#        # Match with range
+#        # Interpreted as -inf or inf respectively if unset
+#        #: float
+#        # min =
+#        # max =
+
+#        # Set the fill style property to
+#        # Property is left intact if unset
+#        #: str
+#        #fill =
+
+#        # Set the opacity property to
+#        # Property is left intact if unset
+#        #: float [0 - 1]
+#        #opacity =
+
+#        # Set the whole style attribute to
+#        # Attribute is left intact if not set
+#        # This option overrides previous fill and opacity options
+#        #: str
+#        #style =
+
+#        # Set inner SVG text to
+#        # If the element contains at least one children, the text of the first
+#        # children is set to. This fixes behaviour, when editors create tspan
+#        # elements inside text elements.
+#        # "%%" can be used as a placeholder for the current (rounded, mapped)
+#        # value
+#        # SVG text and child elements are left intact if not set
+#        text = "%%"
+
+
+# ===================== #
+# Scheme element groups #
+# ===================== #
+
+## Example element group, multiple can be defined
+#[[scheme_element_group]]
+#    # Name of the group
+#    #: str
+#    group_name = ""
+
+#    # Example element in the element group, multiple can be defined
+#    [[scheme_element_group.element]]
+#        # Same options as scheme_element_template, but use
+#        # "scheme_element_group.element" prefix for tables and table arrays
+#        # instead of "scheme_element_template. Strings in these elements can
+#        # contain variables in enclosed in {}. Those variables are then
+#        # resolved using Python str.format()
+#        # template option references existing template to inherit from
+
+
+# ======= #
+# Schemes #
+# ======= #
+
+## Example scheme, multiple can be defined
+#[[scheme]]
+#    # Scheme name shown to the user
+#    #: str
+#    scheme_name = ""
+#    # Unique scheme id used in the URLs
+#    #: str
+#    scheme_id = ""
+#    # Path to the SVG file of the scheme, relative to global SVG directory
+#    #: str
+#    svg_path = ""
+#    # Inteval in which the scheme refreshes (does not affect values loaded using
+#    # the CoV notifications)
+#    #: int
+#    interval = 5
+
+#    # Example element in the scheme, multiple can be defined
+#    [[scheme.element]]
+#        # Same options as scheme_element_template, but use
+#        # "scheme.element" prefix for tables and table arrays instead of
+#        # "scheme_element_template.
+#        # template option references existing template to inherit from
+
+#    # Example element group used in the scheme, multiple can be defined
+#    [[scheme.group]]
+#        # Name of the group to insert
+#        #: str
+#        group_name = ""
+#        # Table with values of variables used in the element group, all
+#        # variables used in the element group must be defined.
+#        #: dict[str, str]
+#        variables = { }

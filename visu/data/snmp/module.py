@@ -1,5 +1,3 @@
-from dataclasses import field
-from enum import Enum
 import logging
 
 from fastapi.exceptions import HTTPException
@@ -14,125 +12,38 @@ from pysnmp.hlapi.asyncio import (
     UdpTransportTarget,
     getCmd,
     setCmd,
-    usm3DESEDEPrivProtocol,
-    usmAesCfb128Protocol,
-    usmAesCfb192Protocol,
-    usmAesCfb256Protocol,
-    usmDESPrivProtocol,
-    usmHMAC128SHA224AuthProtocol,
-    usmHMAC192SHA256AuthProtocol,
-    usmHMAC256SHA384AuthProtocol,
-    usmHMAC384SHA512AuthProtocol,
-    usmHMACMD5AuthProtocol,
-    usmHMACSHAAuthProtocol,
-    usmNoAuthProtocol,
-    usmNoPrivProtocol,
 )
 from pysnmp.hlapi.auth import UsmUserData
 
-from tomlconfig import ConfigError, configclass
+from tomlconfig import ConfigError
 
-from .base import DataModule, DataModuleConfig
+from ..base import DataModule
+from .config import SNMPConnectionConfig, SNMPDataModuleConfig
 
 
 _logger = logging.getLogger(__name__)
-
-
-@configclass
-class SNMPCommunity:
-    community_name: str = ""
-    version: int = 0
-
-
-class SNMPAuthProtocol(Enum):
-    NO = "no"
-    HMACMD5 = "HMACMD5"
-    HMACSHA = "HMACSHA"
-    HMAC128SHA224 = "HMAC128SHA224"
-    HMAC192SHA256 = "HMAC192SHA256"
-    HMAC256SHA384 = "HMAC256SHA384"
-    HMAC384SHA512 = "HMAC384SHA512"
-
-    def get_oid(self) -> tuple[int, ...]:
-        if self == SNMPAuthProtocol.NO:
-            return usmNoAuthProtocol
-        if self == SNMPAuthProtocol.HMACMD5:
-            return usmHMACMD5AuthProtocol
-        if self == SNMPAuthProtocol.HMACSHA:
-            return usmHMACSHAAuthProtocol
-        if self == SNMPAuthProtocol.HMAC128SHA224:
-            return usmHMAC128SHA224AuthProtocol
-        if self == SNMPAuthProtocol.HMAC192SHA256:
-            return usmHMAC192SHA256AuthProtocol
-        if self == SNMPAuthProtocol.HMAC256SHA384:
-            return usmHMAC256SHA384AuthProtocol
-        if self == SNMPAuthProtocol.HMAC384SHA512:
-            return usmHMAC384SHA512AuthProtocol
-        assert False
-
-
-class SNMPPrivProtocol(Enum):
-    NO = "no"
-    DES = "DES"
-    DESEDE = "3DESEDE"
-    AESCFB128 = "AesCfb128"
-    AESCFB192 = "AesCfb192"
-    AESCFB256 = "AesCfb256"
-
-    def get_oid(self) -> tuple[int, ...]:
-        if self == SNMPPrivProtocol.NO:
-            return usmNoPrivProtocol
-        if self == SNMPPrivProtocol.DES:
-            return usmDESPrivProtocol
-        if self == SNMPPrivProtocol.DESEDE:
-            return usm3DESEDEPrivProtocol
-        if self == SNMPPrivProtocol.AESCFB128:
-            return usmAesCfb128Protocol
-        if self == SNMPPrivProtocol.AESCFB192:
-            return usmAesCfb192Protocol
-        if self == SNMPPrivProtocol.AESCFB256:
-            return usmAesCfb256Protocol
-        assert False
-
-
-@configclass
-class SNMPUsm:
-    username: str = ""
-    auth_key: str | None = None
-    auth_key_file: str | None = None
-    priv_key: str | None = None
-    priv_key_file: str | None = None
-    auth_protocol: SNMPAuthProtocol | None = None
-    priv_protocol: SNMPPrivProtocol | None = None
-
-
-@configclass
-class SNMPConnection:
-    conn_id: str = ""
-    host: str = ""
-    port: int = 161
-    timeout: int = 1
-    retries: int = 5
-    ipv6: bool = False
-    community_auth: SNMPCommunity | None = None
-    usm_auth: SNMPUsm | None = None
-
-
-@configclass
-class SNMPDataModuleConfig(DataModuleConfig):
-    conn: list[SNMPConnection] = field(default_factory=list)
 
 
 class SNMPDataModule(DataModule):
     name = "snmp"
 
     def __init__(self, config: SNMPDataModuleConfig) -> None:
-        self._conns = {}
+        self._conns: dict[str, SNMPConnectionConfig] = {}
         for conn in config.conn:
             if conn.conn_id in self._conns:
                 raise ConfigError("Duplicate SNMP connection id: "
                                   f"{conn.conn_id}")
             self._conns[conn.conn_id] = conn
+        for conn in self._conns.values():
+            if conn.usm_auth is not None:
+                if conn.usm_auth.auth_key_file is not None:
+                    with open(conn.usm_auth.auth_key_file, "r",
+                              encoding="utf_8") as key_file:
+                        conn.usm_auth.auth_key = key_file.read()
+                if conn.usm_auth.priv_key_file is not None:
+                    with open(conn.usm_auth.priv_key_file, "r",
+                              encoding="utf_8") as key_file:
+                        conn.usm_auth.auth_key = key_file.read()
 
     def _parse_data_id(self, data_id: str) -> tuple[str, ObjectIdentity]:
         data = data_id.split("::")
@@ -140,7 +51,7 @@ class SNMPDataModule(DataModule):
             raise HTTPException(400, "Invalid data id")
         return data[0], ObjectIdentity(*data[1:])
 
-    def _get_auth_data(self, conn: SNMPConnection) \
+    def _get_auth_data(self, conn: SNMPConnectionConfig) \
             -> CommunityData | UsmUserData:
         if conn.usm_auth:
             return UsmUserData(conn.usm_auth.username,
@@ -157,11 +68,11 @@ class SNMPDataModule(DataModule):
                                  mpModel=conn.community_auth.version)
         return CommunityData("public", mpModel=1)
 
-    def _get_transport(self, conn: SNMPConnection) \
+    def _get_transport(self, conn: SNMPConnectionConfig) \
             -> UdpTransportTarget | Udp6TransportTarget:
         transport_type = Udp6TransportTarget if conn.ipv6 \
             else UdpTransportTarget
-        return transport_type((conn.host, conn.port), conn.timeout,
+        return transport_type((conn.address, conn.port), conn.timeout,
                               conn.retries)
 
     async def get_value(self, data_id: str) -> str | list[str]:

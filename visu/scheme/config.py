@@ -84,10 +84,3 @@ class SchemeConfig:
     interval: int = 5
     element: list[ElementConfig] = field(default_factory=list)
     group: list[ElementGroupConfig] = field(default_factory=list)
-
-
-@configclass
-class SchemesConfig:
-    scheme: list[SchemeConfig] = field(default_factory=list)
-    template: list[ElementConfig] = field(default_factory=list)
-    group: list[ElementGroupTemplateConfig] = field(default_factory=list)

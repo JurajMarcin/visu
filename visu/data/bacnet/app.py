@@ -30,8 +30,8 @@ class VizuApplication(BIPSimpleApplication):
                  cov_queue: Queue[tuple[Address, ObjectIdentifier, str,
                                         str | list[str]]]):
         local_device = LocalDeviceObject(
-            objectName=config.object_name,
-            objectIdentifier=config.object_identifier,
+            objectName=config.device_name,
+            objectIdentifier=config.device_identifier,
             maxApduLengthAccepted=config.max_apdu_length_accepted,
             segmentationSupported=config.segmentation_supported,
             vendorIdentifier=config.vendor_identifier,

@@ -15,8 +15,8 @@ class RandomDataModule(DataModule):
 
     def __init__(self) -> None:
         super().__init__()
-        self.values: dict[str, tuple[float, str]] = dict()
-        self.cov_requests: dict[str, dict[int, COVCallback]] = dict()
+        self.values: dict[str, tuple[float, str]] = {}
+        self.cov_requests: dict[str, dict[int, COVCallback]] = {}
         self.running = False
 
     async def start(self) -> None:

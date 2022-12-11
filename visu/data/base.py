@@ -2,15 +2,8 @@ import asyncio
 from logging import Logger
 from typing import Awaitable, Callable, Iterable
 
-from tomlconfig import configclass
-
 
 COVCallback = Callable[[str, str | list[str]], None | Awaitable[None]]
-
-
-@configclass
-class DataModuleConfig:
-    pass
 
 
 class DataModule:
@@ -41,11 +34,11 @@ class DataModule:
                                    for data_id, value in data_id_values)),
         ))
 
-    async def register_cov(self, data_id: str, callback_id: int,
+    async def register_cov(self, data_id: str, callback_id: str,
                            callback: COVCallback) -> bool:
         return False
 
-    async def remove_cov(self, data_id: str, callback_id: int) -> None:
+    async def remove_cov(self, data_id: str, callback_id: str) -> None:
         pass
 
     @staticmethod

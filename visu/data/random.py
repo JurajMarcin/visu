@@ -16,13 +16,15 @@ class RandomDataModule(DataModule):
     def __init__(self) -> None:
         super().__init__()
         self.values: dict[str, tuple[float, str]] = {}
-        self.cov_requests: dict[str, dict[int, COVCallback]] = {}
+        self.cov_requests: dict[str, dict[str, COVCallback]] = {}
         self.running = False
 
     async def start(self) -> None:
+        _logger.debug("Random data module started")
         self.running = True
 
     async def stop(self) -> None:
+        _logger.debug("Random data module stopped")
         self.running = False
 
     def _parse_data_id(self, data_id: str) -> tuple[str, str, float, float]:
@@ -55,19 +57,23 @@ class RandomDataModule(DataModule):
         _logger.debug("set %r=%r", data_id, value)
         name, _, _, _ = self._parse_data_id(data_id)
         self.values[name] = time(), value
-        if id in self.cov_requests:
+        if name in self.cov_requests:
             await self.call_covs(data_id, value,
-                                 self.cov_requests[data_id].values(), _logger)
+                                 self.cov_requests[name].values(), _logger)
         return value
 
-    async def register_cov(self, data_id: str, callback_id: int,
+    async def register_cov(self, data_id: str, callback_id: str,
                            callback: COVCallback) -> bool:
-        if id not in self.cov_requests:
-            self.cov_requests[data_id] = {}
-        self.cov_requests[data_id][callback_id] = callback
+        _logger.debug("register_cov %r %r", data_id, callback_id)
+        name, _, _, _ = self._parse_data_id(data_id)
+        if name not in self.cov_requests:
+            self.cov_requests[name] = {}
+        self.cov_requests[name][callback_id] = callback
         return True
 
-    async def remove_cov(self, data_id: str, callback_id: int) -> None:
-        if id in self.cov_requests \
-                and callback_id in self.cov_requests[data_id]:
-            del self.cov_requests[data_id][callback_id]
+    async def remove_cov(self, data_id: str, callback_id: str) -> None:
+        _logger.debug("remove_cov %r %r", data_id, callback_id)
+        name, _, _, _ = self._parse_data_id(data_id)
+        if name in self.cov_requests \
+                and callback_id in self.cov_requests[name]:
+            self.cov_requests[data_id].pop(callback_id)

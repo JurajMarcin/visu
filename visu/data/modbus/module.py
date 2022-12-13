@@ -99,7 +99,8 @@ class ModbusDataModule(DataModule):
                 "ir": client.read_input_registers,
             }[obj_type](addr, count, slave)
             if isinstance(res, ExceptionResponse):
-                _logger.error("Error: %r code: %r", res, res.exception_code)
+                _logger.error("Error: %r code: %r while reading %r", res,
+                              res.exception_code, data_id)
                 raise HTTPException(500,
                                     f"Modbus error: {res} "
                                     f"code: {res.exception_code}")
@@ -114,7 +115,7 @@ class ModbusDataModule(DataModule):
                 raise HTTPException(500, "Invalid response from Modbus")
             return list(map(str, value)) if count > 1 else str(value[0])
         except ModbusException as ex:
-            _logger.error("Exception: %r", ex)
+            _logger.error("Exception: %r while reading %r", ex, data_id)
             raise HTTPException(500, f"Modbus exception: {ex}") from ex
         finally:
             if client is not None:
@@ -134,13 +135,16 @@ class ModbusDataModule(DataModule):
             client = _build_client(self._conns[conn_id])
             await client.connect()
             if obj_type == "co":
-                res = await client.write_coil(addr, bool(value), slave)
+                res = await client.write_coil(addr,
+                                              value.lower() in ("true", "1"),
+                                              slave)
             elif obj_type == "hr":
                 res = await client.write_register(addr, int(value), slave)
             else:
                 assert False
             if isinstance(res, ExceptionResponse):
-                _logger.error("Error: %r code: %r", res, res.exception_code)
+                _logger.error("Error: %r code: %r while writing %r=%r", res,
+                              res.exception_code, data_id, value)
                 raise HTTPException(500,
                                     f"Modbus error: {res} "
                                     f"code: {res.exception_code}")
@@ -151,7 +155,8 @@ class ModbusDataModule(DataModule):
             _logger.error("Invalid response from Modbus")
             raise HTTPException(500, "Invalid response from Modbus")
         except ModbusException as ex:
-            _logger.error("Exception: %r", ex)
+            _logger.error("Exception: %r while writing %r=%r", ex, data_id,
+                          value)
             raise HTTPException(500, f"Modbus exception: {ex}") from ex
         except ValueError as ex:
             raise HTTPException(400, "Invalid value: {ex}") from ex

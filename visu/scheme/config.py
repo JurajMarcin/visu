@@ -51,6 +51,7 @@ class ElementConfig:
 
     type: ElementType = ElementType.TEXT
     match: str | None = None
+    enum: tuple[str] | None = None
     min: float | None = None
     max: float | None = None
 

@@ -28,6 +28,7 @@ class SchemesController:
 
     def __init__(self, config: Config) -> None:
         etree.register_namespace("", "http://www.w3.org/2000/svg")
+        self.schemes_dir = config.schemes_dir
 
         self._templates: dict[str, ElementConfig] = {}
         for template in config.scheme_element_template:
@@ -101,6 +102,9 @@ class SchemesController:
         new_element.type = element.type
         new_element.match = None if element.match is None else \
             self._str_resolve_variables(element.match, variables)
+        new_element.enum = None if element.enum is None else \
+            tuple(self._str_resolve_variables(enum_value, variables)
+                  for enum_value in element.enum)
         new_element.min = element.min
         new_element.max = element.max
 

@@ -1,4 +1,4 @@
-const SOCKET_URL = "ws://localhost:8000/ws"
+const SOCKET_URL = "ws://localhost:8000/ws";
 
 const ELEMENT_TYPE_TEXT = "text";
 const ELEMENT_TYPE_INT = "int";
@@ -30,12 +30,14 @@ const PlotRenderer = ({ scheme_id, element }) => {
     React.useEffect(() => {
         (async () => {
             try {
-                const response = await fetch(`http://localhost:8000/schemes/${SCHEME_CONFIG.scheme_id}/influx/${element.svg_id}?range=${range}`);
-                const data = await response.text();
-                console.log(data);
-                setFluxResponse(data);
+                const response = await fetch(`http://localhost:8000/schemes/${SCHEME_CONFIG.scheme_id}/influx/${element.svg_id}?limit=${range}`);
+                if (response.status == 200) {
+                    const data = await response.text();
+                    setFluxResponse(data);
+                }
             } catch (error) {
-                console.error(error)
+                console.error(error);
+                alert("Could not load data from InfluxDB");
             }
         })();
     }, [scheme_id, element, range, setFluxResponse]);
@@ -50,14 +52,71 @@ const PlotRenderer = ({ scheme_id, element }) => {
     const lineLayer = React.useMemo(() => ({
         type: "line",
         x: "_time",
-        y: "_value"
+        y: "_value",
     }), []);
 
     const config = React.useMemo(() => ({ fluxResponse, layers: [lineLayer] }), [fluxResponse]);
 
     return React.createElement("div", {}, [
-        React.createElement(PlotSettings, { rangeUpdated: (range) => setRange(range), key: "plotSettings" }, null),
-        React.createElement("div", {style, key: "plot"}, React.createElement(Giraffe.Plot, {config}, null)),
+        React.createElement("h2", {  key: "plotTitle" }, "History"),
+        React.createElement(PlotSettings, { range, rangeUpdated: (range) => setRange(range), key: "plotSettings" }, null),
+        fluxResponse
+            ? React.createElement("div", {style, key: "plot"}, React.createElement(Giraffe.Plot, {config}, null))
+            : React.createElement("div", {key: "plotLoading"}, "Loading plot data..."),
+    ]);
+};
+
+const UpdateForm = ({ element, socket }) => {
+
+    const [value, setValue] = React.useState(element.enum && element.enum.length ? element.enum[0] : "");
+
+    const valueError = React.useMemo(() => {
+        if (element.enum && element.enum.length && !element.enum.find((v) => v !== value.toString()))
+            return `Value is not one of ${element.enum}`;
+        if (element.match && !new RegExp(element).test(value))
+            return `Value does not match ${element.match}`;
+        if (element.type === ELEMENT_TYPE_FLOAT || element.type === ELEMENT_TYPE_INT) {
+            const numValue = element.type === ELEMENT_TYPE_FLOAT ? Number.parseFloat(value) : Number.parseInt(value);
+            if (isNaN(numValue))
+                return "Value is not a number";
+            if (element.min !== null && element.min > intValue)
+                return `Value is less than ${element.min}`;
+            if (element.max !== null && element.max < intValue)
+                return `Value is more than ${element.max}`;
+        }
+        return null;
+    }, [element, value]);
+
+    return React.createElement("div", { className: "menu__update" }, [
+        React.createElement("h2", { key: "title" }, "Update value"),
+        element.enum && element.enum.length
+            ? React.createElement(
+                "select",
+                { key: "select", value, onChange: (event) => setValue(event.target.value) },
+                element.enum.map((enumValue) => React.createElement(
+                    "option",
+                    { key: enumValue, value: enumValue },
+                    element.map[enumValue] ?? enumValue,
+                )),
+            )
+            : React.createElement(
+                "input",
+                { key: "input", value, onChange: (event) => setValue(event.target.value) },
+                null,
+            ),
+        React.createElement(
+            "button",
+            {
+                key: "submit",
+                disabled: !!valueError,
+                onClick: () => {
+                    socket.send(JSON.stringify({ command: "set", data: { [element.data_id]: value }}));
+                    setValue(element.enum && element.enum.length ? element.enum[0] : "");
+                },
+            },
+            "Update",
+        ),
+        valueError ? React.createElement("div", { key: "valueError" }, valueError) : null,
     ]);
 };
 
@@ -98,93 +157,27 @@ const renderValue = (dataModule, dataId, data) => {
         svgElement.setAttribute("style", elementStyle.style);
     if (elementStyle.text !== null) {
         if (svgElement.children.length)
-            svgElement.children[0].innerHTML = elementStyle.text
-                .replace("%%", element.map[data] ?? data);
+            svgElement.children[0].innerHTML = elementStyle.text.replace("%%", element.map[data] ?? data);
         else
             svgElement.innerHTML = elementStyle.text.replace("%%", element.map[data] ?? data);
     }
 };
 
 const showMenu = (element, socket) => {
-    document.querySelector("#update-value").value = "";
     document.querySelector("#menu").classList.toggle("menu--open");
-    const message = document.querySelector("#update-message");
-    const oldSubmit = document.querySelector("#update-submit");
-    oldSubmit.replaceWith(oldSubmit.cloneNode(true));
-    const submit = document.querySelector("#update-submit");
-    if (element.write) {
-        submit.removeAttribute("disabled");
-    } else {
-        submit.setAttribute("disabled", true);
-    }
-    submit.addEventListener("click", () => {
-        const value = document.querySelector("#update-value").value;
-        switch (element.type) {
-            case ELEMENT_TYPE_TEXT:
-                if (element.enum && element.enum.length()
-                        && !element.enum.find((v) => v === value)) {
-                    message.innerHTML = `Value is not one of ${element.enum}`;
-                    return;
-                }
-                if (element.match && !new RegExp(element).test(value)) {
-                    message.innerHTML = `Value is does not match '${element.match}'`;
-                    return;
-                }
-                break;
-            case ELEMENT_TYPE_INT:
-                const intValue = Number.parseInt(value);
-                if (isNaN(intValue)) {
-                    message.innerHTML = "Value is not a number";
-                    return;
-                }
-                if (element.min !== null && element.min > intValue) {
-                    message.innerHTML = `Value is less than ${element.min}`
-                    return;
-                }
-                if (element.max !== null && element.max < intValue) {
-                    message.innerHTML = `Value is more than ${element.max}`
-                    return;
-                }
-                break;
-            case ELEMENT_TYPE_FLOAT:
-                const floatValue = Number.parseInt(value);
-                if (isNaN(floatValue)) {
-                    message.innerHTML = "Value is not a number";
-                    return;
-                }
-                if (element.min !== null && element.minf > floatValue) {
-                    message.innerHTML = `Value is less than ${element.min}`
-                    return;
-                }
-                if (element.max !== null && element.maxf < floatValue) {
-                    message.innerHTML = `Value is more than ${element.max}`
-                    return;
-                }
-                break;
-            case ELEMENT_TYPE_BOOL:
-                if (element.enum && element.enum.length()
-                        && !element.enum.find((v) => v === value)) {
-                    message.innerHTML = `Value is not one of ${element.enum}`;
-                    return;
-                }
-                break;
-        }
-        socket.send(JSON.stringify({ command: "set", data: { [element.data_id]: value }}));
-        document.querySelector("#update-value").value = "";
-    });
 
     ReactDOM.render(
-        React.createElement(PlotRenderer, {
-            scheme_id: SCHEME_CONFIG.scheme_id,
-            element,
-        }, null),
-        document.getElementById("graph"),
+        React.createElement("div", {}, [
+            element.write ? React.createElement(UpdateForm, { key: "form", element, socket }, null) : null,
+            React.createElement(PlotRenderer, { key: "plot", scheme_id: SCHEME_CONFIG.scheme_id, element }, null),
+        ]),
+        document.getElementById("react-menu"),
     );
 };
 
 
 const aggregateElements = (elements)  => {
-    aggregated = {}
+    aggregated = { };
     for (const element of elements) {
         if (!aggregated[element.data_module])
             aggregated[element.data_module] = [];

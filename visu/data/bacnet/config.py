@@ -9,6 +9,7 @@ class BacnetDataModuleConfig:
     device_name: str = "visu"
     device_identifier: int = 12
     address: Address = field(default_factory=Address)
+    network_number: int = 2000
     max_apdu_length_accepted: int = 1024
     segmentation_supported: str = "segmentedBoth"
     vendor_identifier: int = 555

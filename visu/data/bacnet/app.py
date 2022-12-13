@@ -98,9 +98,9 @@ class VizuApplication(BIPSimpleApplication):
                     value = element.readResult.propertyValue.cast_out(datatype)
 
                 results[str(apdu.pduSource)
-                        + "%%" + str(result.objectIdentifier[0])
+                        + "::" + str(result.objectIdentifier[0])
                         + ":" + str(result.objectIdentifier[1])
-                        + "%%" + str(element.propertyIdentifier)] = \
+                        + "::" + str(element.propertyIdentifier)] = \
                     list(map(str, value)) if isinstance(value, list) \
                     else str(value)
         future.set_result(results)

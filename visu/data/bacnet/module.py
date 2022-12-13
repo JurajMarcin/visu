@@ -87,12 +87,16 @@ class BacnetDataModule(DataModule):
                 data_id = (address, object_identifier)
                 if data_id not in self.cov_requests:
                     return
+                cov_callbacks = self.cov_requests[data_id][1].values()
                 await DataModule.call_covs(
-                    str(address) + "%%" + str(object_identifier.value[0]) + ":"
-                    + str(object_identifier.value[1]) + "%%"
+                    str(address) + "::" + str(object_identifier.value[0]) + ":"
+                    + str(object_identifier.value[1]) + "::"
                     + str(property_identifier),
-                    value, self.cov_requests[data_id][1].values(), _logger,
+                    value, cov_callbacks, _logger,
                 )
+            except Exception as ex:
+                _logger.warning("An exception occurred while calling CoV %r",
+                                ex)
             finally:
                 self.cov_lock.release()
 
@@ -171,7 +175,6 @@ class BacnetDataModule(DataModule):
         try:
             datatype = get_datatype(object_identifier.value[0],
                                     property_identifier)
-            print(datatype)
 
             req_value = Any()
             if value == 'null':
@@ -194,12 +197,13 @@ class BacnetDataModule(DataModule):
                 req_value.cast_in(datatype(dvalue))
             elif issubclass(datatype, Atomic):
                 if datatype is Integer:
-                    parsed_value: int | float = int(value)
+                    req_value.cast_in(datatype(int(value)))
                 elif datatype is Real:
-                    parsed_value = float(value)
+                    req_value.cast_in(datatype(float(value)))
                 elif datatype is Unsigned:
-                    parsed_value = int(value)
-                req_value.cast_in(datatype(parsed_value))
+                    req_value.cast_in(datatype(int(value)))
+                else:
+                    req_value.cast_in(datatype(value))
             else:
                 raise HTTPException(400, "Could not determine datatype")
         except ValueError as ex:

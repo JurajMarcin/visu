@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1920"
+   height="1080"
+   viewBox="0 0 508 285.74999"
+   version="1.1"
+   id="svg13191"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="heating.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview13193"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="0.69739583"
+     inkscape:cx="339.11875"
+     inkscape:cy="680.38835"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid15853"
+       originx="0"
+       originy="0"
+       spacingx="4.2333333"
+       spacingy="4.2333333"
+       dotted="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs13188">
+    <rect
+       x="50.799999"
+       y="87.57708"
+       width="23.018749"
+       height="30.427082"
+       id="rect2272-9" />
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="Pipes">
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#a0a0a0;stroke-width:8;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       d="M 465.66666,148.16666 H 84.666666"
+       id="path21705" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#a0a0a0;stroke-width:8;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       d="M 465.66666,21.166667 H 84.666668 l -2e-6,211.666663 -21.166667,0"
+       id="path21705-8" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#a0a0a0;stroke-width:7.99999;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       d="m 105.83333,21.166666 v 29.633333 h 4.23334"
+       id="path22118" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#a0a0a0;stroke-width:7.99999;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       d="m 296.33333,21.166666 v 29.633333 h 4.23333"
+       id="path22120" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#a0a0a0;stroke-width:7.99999;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       d="M 105.83333,148.16666 V 177.8 h 4.23334"
+       id="path22122" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#a0a0a0;stroke-width:7.99999;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       d="M 296.33333,148.16666 V 177.8 h 4.23333"
+       id="path22124" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="Rooms">
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.11667;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       id="rect18883-4-7"
+       width="148.16667"
+       height="84.666664"
+       x="127"
+       y="42.333332"
+       inkscape:label="room1" />
+    <path
+       style="display:inline;fill:#fe0000;fill-opacity:1;stroke:#000000;stroke-width:0.590228;stroke-dasharray:none;stroke-opacity:1"
+       d="M 114.3,57.15 V 44.45 L 127,57.15 V 44.45 Z"
+       id="room1_valve"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="room1_valve" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="148.09612"
+       y="68.537666"
+       id="text20983"
+       inkscape:label="room1_target"><tspan
+         sodipodi:role="line"
+         id="tspan21312">Target temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="198.62799"
+       y="68.608223"
+       id="room1_target_temp"
+       inkscape:label="room1_target_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308"
+         style="stroke-width:1"
+         x="198.62799"
+         y="68.608223">22 C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="148.09612"
+       y="89.704338"
+       id="text20983-2"
+       inkscape:label="room1_current"><tspan
+         sodipodi:role="line"
+         id="tspan21426">Current temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="198.62799"
+       y="89.774895"
+       id="room1_current_temp"
+       inkscape:label="room1_current_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-1"
+         style="stroke-width:1"
+         x="198.62799"
+         y="89.774895">22 C</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.11667;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       id="rect18883-4-8"
+       width="148.16667"
+       height="84.666664"
+       x="127"
+       y="169.33333"
+       inkscape:label="room2" />
+    <path
+       style="display:inline;fill:#fe0000;fill-opacity:1;stroke:#000000;stroke-width:0.590228;stroke-dasharray:none;stroke-opacity:1"
+       d="m 114.3,184.15 v -12.7 l 12.7,12.7 v -12.7 z"
+       id="room2_valve"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="room2_valve" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="148.09612"
+       y="195.53767"
+       id="text20983-5"
+       inkscape:label="room2_target"><tspan
+         sodipodi:role="line"
+         id="tspan21312-5"
+         x="148.09612"
+         y="195.53767">Target temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="198.62799"
+       y="195.60823"
+       id="room2_target_temp"
+       inkscape:label="room2_target_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-7"
+         style="stroke-width:1"
+         x="198.62799"
+         y="195.60823">22 C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="148.09612"
+       y="216.70435"
+       id="text20983-2-6"
+       inkscape:label="room2_current"><tspan
+         sodipodi:role="line"
+         id="tspan21470">Current temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="198.62799"
+       y="216.77489"
+       id="room2_current_temp"
+       inkscape:label="room2_current_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-1-9"
+         style="stroke-width:1"
+         x="198.62799"
+         y="216.77489">22 C</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.11666667;stroke-linecap:square;stroke-opacity:1;stroke-dasharray:none"
+       id="rect18883"
+       width="148.16667"
+       height="84.666664"
+       x="317.5"
+       y="42.333332"
+       inkscape:label="room3" />
+    <path
+       style="display:inline;fill:#fe0000;fill-opacity:1;stroke:#000000;stroke-width:0.590228;stroke-dasharray:none;stroke-opacity:1"
+       d="m 304.8,57.15 v -12.7 l 12.7,12.7 v -12.7 z"
+       id="room3_valve"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="room3_valve" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="338.5961"
+       y="68.537666"
+       id="text20983-5-3"
+       inkscape:label="room3_target"><tspan
+         sodipodi:role="line"
+         id="tspan21312-5-7"
+         x="338.5961"
+         y="68.537666">Target temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="389.12796"
+       y="68.608223"
+       id="room3_target_temp"
+       inkscape:label="room3_target_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-7-5"
+         style="stroke-width:1"
+         x="389.12796"
+         y="68.608223">22 C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="338.5961"
+       y="89.704338"
+       id="text20983-2-6-2"
+       inkscape:label="room3_current"><tspan
+         sodipodi:role="line"
+         id="tspan21470-5"
+         x="338.5961"
+         y="89.704338">Current temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="389.12796"
+       y="89.774879"
+       id="room3_current_temp"
+       inkscape:label="room3_current_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-1-9-7"
+         style="stroke-width:1"
+         x="389.12796"
+         y="89.774879">22 C</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.11667;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       id="rect18883-4"
+       width="148.16667"
+       height="84.666664"
+       x="317.5"
+       y="169.33333"
+       inkscape:label="room4" />
+    <path
+       style="display:inline;fill:#fe0000;fill-opacity:1;stroke:#000000;stroke-width:0.590228;stroke-dasharray:none;stroke-opacity:1"
+       d="m 304.8,184.15 v -12.7 l 12.7,12.7 v -12.7 z"
+       id="room4_valve"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="room4_valve" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="338.5961"
+       y="195.53767"
+       id="text20983-5-3-4"
+       inkscape:label="room4_target"><tspan
+         sodipodi:role="line"
+         id="tspan21312-5-7-4"
+         x="338.5961"
+         y="195.53767">Target temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="389.12796"
+       y="195.60823"
+       id="room4_target_temp"
+       inkscape:label="room4_target_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-7-5-0"
+         style="stroke-width:1"
+         x="389.12796"
+         y="195.60823">22 C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="338.5961"
+       y="216.70435"
+       id="text20983-2-6-2-7"
+       inkscape:label="room4_current"><tspan
+         sodipodi:role="line"
+         id="tspan21470-5-8"
+         x="338.5961"
+         y="216.70435">Current temp:</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="389.12796"
+       y="216.77489"
+       id="room4_current_temp"
+       inkscape:label="room4_current_temp"><tspan
+         sodipodi:role="line"
+         id="tspan21308-1-9-7-8"
+         style="stroke-width:1"
+         x="389.12796"
+         y="216.77489">22 C</tspan></text>
+  </g>
+  <g
+     inkscape:label="Heater"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.508865"
+       id="rect923-3"
+       width="36.26963"
+       height="73.638351"
+       x="27.23037"
+       y="196.01416" />
+    <rect
+       style="fill:#ff0000;stroke:#00000d;stroke-width:0.445283;fill-opacity:1"
+       id="heater_state"
+       width="49.102459"
+       height="6.6119218"
+       x="20.813957"
+       y="267.99518"
+       inkscape:label="heater_state" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.25012"
+       id="rect931-0"
+       width="8.5864992"
+       height="3.7387638"
+       x="41.07193"
+       y="192.10028" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.508865"
+       id="rect933-1"
+       width="7.771667"
+       height="7.3830838"
+       x="41.479355"
+       y="249.17493" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.508865"
+       id="rect935-5"
+       width="1.1657501"
+       height="3.6915419"
+       x="44.855652"
+       y="256.59906" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.508865"
+       id="rect937-4"
+       width="17.379196"
+       height="6.3197088"
+       x="36.916016"
+       y="259.7608" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.397314;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 39.669946,192.14767 h 11.38945 l -2.76965,-3.51087 -0.22609,-38.35327 -5.68059,-0.0976 0.0283,38.47266 z"
+       id="path939-2" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.520454;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect941-2"
+       width="1.5767548"
+       height="3.8897309"
+       x="56.21489"
+       y="192.10121" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.525034;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect941-6-0"
+       width="1.6065209"
+       height="3.8851504"
+       x="33.135406"
+       y="192.0795" />
+    <circle
+       style="fill:none;fill-opacity:1;stroke:#00000d;stroke-width:0.570656;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path2553-6"
+       cx="45.365189"
+       cy="252.86649"
+       r="2.246676" />
+    <rect
+       style="fill:#ffffff;stroke:#00000d;stroke-width:0.508865"
+       id="rect937-9-6"
+       width="4.5267954"
+       height="6.1666989"
+       x="43.342209"
+       y="259.8486" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:7.99999;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       x="37.747223"
+       y="232.76277"
+       id="heater_temp"
+       inkscape:label="heater_temp"><tspan
+         sodipodi:role="line"
+         id="tspan40443"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:8"
+         x="37.747223"
+         y="232.76277">95 C</tspan></text>
+  </g>
+</svg>

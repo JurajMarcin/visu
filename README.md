@@ -35,7 +35,8 @@ visu [OPTIONS]
 By default, config is loaded from files in the directory `/etc/visu/` in
 alphabetical order.
 
-See `config.toml` for more information about options that can be configured.
+See `config.toml` for more information about options that can be configured
+or `config.example.toml` for an example configuration with two schemes.
 
 ## Schemes
 
@@ -43,8 +44,11 @@ By default, scheme SVG files are loaded from `/etc/visu/schemes`.
 
 Each scheme consists of a scheme SVG and scheme configuration (see
 Configuration).
+
 Scheme SVG can be drawn in any vector editor or can be typed by hand, but you
 must be able to set the `id` attribute of elements you want to update.
+See the `./schemes/` directory for example SVG schemes.
+
 Each scheme configuration then contains a set of elements which tell `visu` how
 to update SVG elements in the scheme.
 To make things easier, templates can be also defined.
@@ -72,6 +76,10 @@ We can define a network port using a template:
     [[scheme_element_template.style]]
         match = "down"
         fill = "red"
+
+    [[scheme_element_template.style]]
+        match = ".*" # fallback
+        fill = "orange"
 ```
 
 Then we define a generic five port switch using an element group:
@@ -84,27 +92,27 @@ Then we define a generic five port switch using an element group:
         template = "port"
         data_module = "snmp"
         data_id = "{snmp_conn}::.1.3.6.1.2.1.2.2.1.8.1"
-        svg_id = "switch_{switch_id}_port_1"
+        svg_id = "switch_{id}_port_1"
     [[scheme_element_group.element]]
         template = "port"
         data_module = "snmp"
         data_id = "{snmp_conn}::.1.3.6.1.2.1.2.2.1.8.2"
-        svg_id = "switch_{switch_id}_port_3"
+        svg_id = "switch_{id}_port_3"
     [[scheme_element_group.element]]
         template = "port"
         data_module = "snmp"
         data_id = "{snmp_conn}::.1.3.6.1.2.1.2.2.1.8.3"
-        svg_id = "switch_{switch_id}_port_3"
+        svg_id = "switch_{id}_port_3"
     [[scheme_element_group.element]]
         template = "port"
         data_module = "snmp"
         data_id = "{snmp_conn}::.1.3.6.1.2.1.2.2.1.8.4"
-        svg_id = "switch_{switch_id}_port_3"
+        svg_id = "switch_{id}_port_3"
     [[scheme_element_group.element]]
         template = "port"
         data_module = "snmp"
         data_id = "{snmp_conn}::.1.3.6.1.2.1.2.2.1.8.5"
-        svg_id = "switch_{switch_id}_port_3"
+        svg_id = "switch_{id}_port_3"
 ```
 
 And now we can easily create a scheme with 3 switches:
@@ -118,13 +126,13 @@ And now we can easily create a scheme with 3 switches:
 
     [[scheme.group]]
         group_name = "switch"
-        variables = { snmp_conn = "switch1conn", switch1conn = "1" }
+        variables = { snmp_conn = "switch1conn", id = "1" }
 
     [[scheme.group]]
         group_name = "switch"
-        variables = { snmp_conn = "switch2conn", switch1conn = "2" }
+        variables = { snmp_conn = "switch2conn", id = "2" }
 
     [[scheme.group]]
         group_name = "switch"
-        variables = { snmp_conn = "switch3conn", switch1conn = "3" }
+        variables = { snmp_conn = "switch3conn", id = "3" }
 ```

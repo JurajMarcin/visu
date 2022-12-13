@@ -287,6 +287,10 @@
 #    # Not checked if unset
 #    #: str
 #    #match =
+#    # Validate user input as one of following values
+#    # Not checked if unset
+#    #: list[str]
+#    #enum =
 #    # Validate user input value with minimum value
 #    # Not checked if unset
 #    #: float

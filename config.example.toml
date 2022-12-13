@@ -1,0 +1,555 @@
+# ============== #
+# Server options #
+# ============== #
+
+# Address the HTTP server binds to
+#: str
+host = "0.0.0.0"
+# Port the HTTP server binds to
+#: int
+port = 8000
+# Enable debugging output for visu module
+#: bool
+debug = false
+# Enable debugging output for uvicorn server
+#: bool
+uvicorn_debug = false
+# Global SVG schemes directory
+#: str
+schemes_dir = "./schemes"
+
+
+# =============== #
+# InxluxDB client #
+# =============== #
+
+[influx_db]
+    # Url on which InfluxDB Server is accessible
+    #: str
+    url = "http://192.168.130.151:8086"
+    # InfluxDB access token
+    #: str
+    token = "admintoken"
+    # InfluxDB organization name
+    #: str
+    org = "influxdb"
+    # InfluxDB bucket to load data from
+    #: str
+    bucket = "bucket"
+
+
+# ================== #
+# BACnet data module #
+# ================== #
+
+# == Scheme data module id ==
+#
+# bacnet
+
+# == Scheme data id == #
+#
+# BACnet devices are addressed in schemes with this string in this format:
+#
+#   address::objectType:objectInstanceNumber::propertyIdentifier
+#
+# For example for reading presentValue from an analogValue#1 on device with
+# address 192.168.120.3, the data_id looks like this:
+#
+#   192.168.120.3::analogValue:1::presentValue
+
+[bacnet]
+    # Unique device name
+    #: str
+    device_name = "visu"
+    # Unique device identifier
+    #: int (0 - 4194303)
+    device_identifier = 12
+    # Address of the device including network mask
+    #: str
+    address = "192.168.130.1/24"
+    # Number of the BACnet network this device is on
+    #: int (1 - 65534)
+    network_number = 2000
+    # Maximum message size on the network
+    #: int (> 50)
+    max_apdu_length_accepted = 1024
+    # Allow sefgmentation of larger messages
+    #: str
+    segmentation_supported = "segmentedBoth"
+    # How this device should identify
+    #: int (>= 0)
+    vendor_identifier = 555
+    # CoV Request lifetime in seconds
+    #: int
+    cov_lifetime = 300
+    # Request timeout in seconds
+    #: int
+    timeout = 10
+
+
+# ================== #
+# Modbus data module #
+# ================== #
+
+# == Scheme data module id ==
+#
+# modbus
+
+# == Scheme data id == #
+#
+# Modbus devices are addressed in schemes with this string in this format:
+#
+#   conn_id::slave::objType:address[::count]
+#
+# where objType is one of "co" (coils, rw), "di" (discrete inputs, ro),
+# "hr" (holding registers, rw), "ir" (input registers, ro) and count is
+# optional, defaults to 1 if not defined
+#
+# For example for reading 3 coils from address 42 on device with slave number 4
+# on connection named "foo", the data_id looks like this:
+#
+#   foo::4::co:42::3
+
+# Modbus connection, multiple can be specified
+[[modbus.conn]]
+    # Connection id used in schemes
+    #: str
+    conn_id = "mux"
+    # Timout of the Modbus client in seconds
+    #: int
+    timout = 15
+    # Number of retries the client should try before failing
+    #: int
+    retries = 3
+
+    # TCP connection options
+    [modbus.conn.tcp]
+        # Address of the target Modbus device
+        #: str
+        address = "localhost" #192.168.130.130"
+        # Modbus port on the target device
+        #: int
+        port = 5020
+        # Use RTU over TCP
+        #: bool
+        rtu = false
+
+
+# ================ #
+# SNMP data module #
+# ================ #
+
+# == Scheme data module id ==
+#
+# snmp
+
+# == Scheme data id == #
+#
+# SNMP devices are addressed in schemes with this string in this format:
+#
+#   conn_id::snmpOID
+#
+# where snmpOID can be:
+#   - OID in dot-separated integers form
+#   - MIB variable in dot-separated labels form
+#   - MIB name followed by variable name and then followed by an arbitrary
+#     number of variable instance identifications all separated by "::", if only
+#     name is speficied, first variable in MIB is assumed
+#
+# Examples with connection named "foo":
+#
+#   foo::1.3.6.1.2.1.1.1.0
+#   foo::iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0
+#   foo::SNMPv2-MIB::system
+#   foo::SNMPv2-MIB::sysDescr::0
+#   foo::IP-MIB::ipAdEntAddr::127.0.0.1::123
+
+## SNMP connection options, multiple can be specified
+#[[snmp.conn]]
+#    # Connection id used in schemes
+#    #: str
+#    conn_id = ""
+#    # Address of the target device running SNMP
+#    #: str
+#    address = ""
+#    # SNMP port on the target device
+#    #: int
+#    port = 161
+#    # Command timeout in seconds
+#    #: int
+#    timeout = 1
+#    # Number of retries before failing
+#    #: int
+#    retries = 5
+#    # Use IPv6 instead of IPv4
+#    #: bool
+#    ipv6 = false
+
+#    # SNMP community authentication
+#    [snmp.conn.community_auth]
+#        # SNMP community name
+#        #: str
+#        community_name = ""
+#        # SNMP version
+#        #: int (0 = SNMP v1; 1 = SNMP v2c)
+#        version = 0
+
+#    # SNMP USM authentication
+#    # If both authentication schemes are specified, community authentication is used
+#    [snmp.conn.usm_auth]
+#        # SNMP USM username
+#        #: str
+#        username = ""
+#        # SNMP USM authentication key
+#        #: str
+#        #auth_key =
+#        # Load auth_key from file on start
+#        #: str
+#        #auth_key_file =
+#        # SNMP USM secret encryption key
+#        #: str
+#        #priv_key =
+#        # Load priv_key from file on start
+#        #: str
+#        #priv_key_file =
+#        # Authentication protocol used
+#        # If auth_key is set "HMACMD5" is default, otherwise "no"
+#        #: str ("no", "HMACMD5", "HMACSHA", "HMAC128SHA224", "HMAC192SHA256", "HMAC256SHA384", "HMAC384SHA512")
+#        #auth_protocol =
+#        # Encryption protocol used
+#        # If priv_key is set "DES" is default, otherwise "no"
+#        #: str ("no", "DES", "3DESEDE", "AesCfb128", "AesCfb192", "AesCfb256")
+#        #priv_protocol =
+
+
+# ======================== #
+# Scheme element templates #
+# ======================== #
+
+# 2state
+[[scheme_element_template]]
+    template = "2state"
+    type = "bool"
+
+    [[scheme_element_template.style]]
+        match = "^(active|[Tt]rue|1)$"
+        fill = "#00AA00"
+        text = ""
+
+    [[scheme_element_template.style]]
+        match = ".*"
+        fill = "#AA0000"
+        text = ""
+
+# float temp
+[[scheme_element_template]]
+    template = "temp"
+    type = "float"
+    precision = 2
+
+    [[scheme_element_template.style]]
+        match = ".*"
+        text = "%% C"
+
+# int rpm
+[[scheme_element_template]]
+    template = "rpm"
+    type = "int"
+
+    [[scheme_element_template.style]]
+        match = ".*"
+        text = "%% RPM"
+
+
+# ===================== #
+# Scheme element groups #
+# ===================== #
+
+# Heated room
+[[scheme_element_group]]
+    group_name = "heating_room"
+
+    # in valve
+    [[scheme_element_group.element]]
+        template = "2state"
+        data_module = "bacnet"
+        data_id = "192.168.130.100::binaryValue:{instance}::presentValue"
+        svg_id = "room{number}_valve"
+        write = false
+        cov = true
+        single = false
+        enum = ["active", "inactive"]
+        influx_query = """ \
+          |> filter(fn: (r) => r["_measurement"] == "bacnet") \
+          |> filter(fn: (r) => r["deviceAddress"] == "192.168.130.100") \
+          |> filter(fn: (r) => r["objectType"] == "binaryValue") \
+          |> filter(fn: (r) => r["objectInstanceNumber"] == "{instance}") \
+          |> filter(fn: (r) => r["_field"] == "presentValue") \
+          """
+
+    # current temp
+    [[scheme_element_group.element]]
+        template = "temp"
+        data_module = "bacnet"
+        data_id = "192.168.130.100::analogValue:{instance}::presentValue"
+        svg_id = "room{number}_current_temp"
+        write = false
+        cov = true
+        single = false
+        influx_query = """ \
+          |> filter(fn: (r) => r["_measurement"] == "bacnet") \
+          |> filter(fn: (r) => r["deviceAddress"] == "192.168.130.100") \
+          |> filter(fn: (r) => r["objectType"] == "analogValue") \
+          |> filter(fn: (r) => r["objectInstanceNumber"] == "{instance}") \
+          |> filter(fn: (r) => r["_field"] == "presentValue") \
+          """
+
+    # target temp
+    [[scheme_element_group.element]]
+        template = "temp"
+        data_module = "bacnet"
+        data_id = "192.168.130.100::analogOutput:{instance}::presentValue"
+        svg_id = "room{number}_target_temp"
+        write = true
+        cov = true
+        single = false
+        influx_query = """ \
+          |> filter(fn: (r) => r["_measurement"] == "bacnet") \
+          |> filter(fn: (r) => r["deviceAddress"] == "192.168.130.100") \
+          |> filter(fn: (r) => r["objectType"] == "analogOutput") \
+          |> filter(fn: (r) => r["objectInstanceNumber"] == "{instance}") \
+          |> filter(fn: (r) => r["_field"] == "presentValue") \
+          """
+
+# Datacentre cooling fan
+[[scheme_element_group]]
+    group_name = "dc_fan"
+
+    # state
+    [[scheme_element_group.element]]
+        template = "2state"
+        data_module = "modbus"
+        data_id = "mux::1::co:{number}1"
+        svg_id = "fan{number}_state"
+        write = true
+        cov = false
+        single = false
+        enum = ["1", "0"]
+        map = { 1 = "On", 0 = "Off" }
+        influx_query = """\
+          |> filter(fn: (r) => r["_measurement"] == "modbus") \
+          |> filter(fn: (r) => r["_field"] == "fan{number}_state") \
+        """
+
+    # rpm
+    [[scheme_element_group.element]]
+        template = "rpm"
+        data_module = "modbus"
+        data_id = "mux::1::ir:{number}0"
+        svg_id = "fan{number}_rpm"
+        write = false
+        cov = false
+        single = false
+        influx_query = """\
+          |> filter(fn: (r) => r["_measurement"] == "modbus") \
+          |> filter(fn: (r) => r["_field"] == "fan{number}_rpm") \
+        """
+
+# Datacentre cooling pump
+[[scheme_element_group]]
+    group_name = "dc_pump"
+
+    # state
+    [[scheme_element_group.element]]
+        template = "2state"
+        data_module = "modbus"
+        data_id = "mux::1::co:{number}001"
+        svg_id = "pump{number}_state"
+        write = true
+        cov = false
+        single = false
+        enum = ["1", "0"]
+        map = { 1 = "On", 0 = "Off" }
+        influx_query = """\
+          |> filter(fn: (r) => r["_measurement"] == "modbus") \
+          |> filter(fn: (r) => r["_field"] == "pump{number}_state") \
+        """
+
+    # rpm
+    [[scheme_element_group.element]]
+        template = "rpm"
+        data_module = "modbus"
+        data_id = "mux::1::ir:{number}000"
+        svg_id = "pump{number}_rpm"
+        write = false
+        cov = false
+        single = false
+        influx_query = """\
+          |> filter(fn: (r) => r["_measurement"] == "modbus") \
+          |> filter(fn: (r) => r["_field"] == "pump{number}_rpm") \
+        """
+
+# Datacentre cooling aisle
+[[scheme_element_group]]
+    group_name = "dc_aisle"
+
+    # intake valve state
+    [[scheme_element_group.element]]
+        template = "2state"
+        data_module = "modbus"
+        data_id = "mux::1::co:{number}01"
+        svg_id = "dc{number}_valve"
+        write = true
+        cov = false
+        single = false
+        enum = ["1", "0"]
+        map = { 1 = "On", 0 = "Off" }
+        influx_query = """\
+          |> filter(fn: (r) => r["_measurement"] == "modbus") \
+          |> filter(fn: (r) => r["_field"] == "dc{number}_valve") \
+        """
+
+    # Temp
+    [[scheme_element_group.element]]
+        template = "temp"
+        data_module = "modbus"
+        data_id = "mux::1::ir:{number}00"
+        svg_id = "dc{number}_temp"
+        write = false
+        cov = false
+        single = false
+        influx_query = """\
+          |> filter(fn: (r) => r["_measurement"] == "modbus") \
+          |> filter(fn: (r) => r["_field"] == "dc{number}_temp") \
+        """
+
+
+# ======= #
+# Schemes #
+# ======= #
+
+[[scheme]]
+    scheme_name = "Heating with BACnet"
+    scheme_id = "heating"
+    svg_path = "heating.svg"
+
+    # Heater state
+    [[scheme.element]]
+        template = "2state"
+        data_module = "bacnet"
+        data_id = "192.168.130.100::binaryValue:1::presentValue"
+        svg_id = "heater_state"
+        write = true
+        cov = true
+        single = false
+        enum = ["active", "inactive"]
+        influx_query = """ \
+          |> filter(fn: (r) => r["_measurement"] == "bacnet") \
+          |> filter(fn: (r) => r["deviceAddress"] == "192.168.130.100") \
+          |> filter(fn: (r) => r["objectType"] == "binaryValue") \
+          |> filter(fn: (r) => r["objectInstanceNumber"] == "1") \
+          |> filter(fn: (r) => r["_field"] == "presentValue") \
+          """
+
+    # Heater temp
+    [[scheme.element]]
+        template = "temp"
+        data_module = "bacnet"
+        data_id = "192.168.130.100::analogValue:1::presentValue"
+        svg_id = "heater_temp"
+        write = false
+        cov = true
+        single = false
+        influx_query = """ \
+          |> filter(fn: (r) => r["_measurement"] == "bacnet") \
+          |> filter(fn: (r) => r["deviceAddress"] == "192.168.130.100") \
+          |> filter(fn: (r) => r["objectType"] == "analogValue") \
+          |> filter(fn: (r) => r["objectInstanceNumber"] == "1") \
+          |> filter(fn: (r) => r["_field"] == "presentValue") \
+          """
+
+    # Room 1
+    [[scheme.group]]
+        group_name = "heating_room"
+        variables = { instance = "2", number = "1" }
+
+    # Room 2
+    [[scheme.group]]
+        group_name = "heating_room"
+        variables = { instance = "3", number = "2" }
+
+    # Room 4
+    [[scheme.group]]
+        group_name = "heating_room"
+        variables = { instance = "4", number = "3" }
+
+    # Room 4
+    [[scheme.group]]
+        group_name = "heating_room"
+        variables = { instance = "5", number = "4" }
+
+[[scheme]]
+    scheme_name = "Datacentre cooling with Modbus"
+    scheme_id = "cooling"
+    svg_path = "cooling.svg"
+    interval = 5
+
+    # fan 1
+    [[scheme.group]]
+        group_name = "dc_fan"
+        variables = { number = "1" }
+
+    # fan 2
+    [[scheme.group]]
+        group_name = "dc_fan"
+        variables = { number = "2" }
+
+    # fan 3
+    [[scheme.group]]
+        group_name = "dc_fan"
+        variables = { number = "3" }
+
+    # pump 1
+    [[scheme.group]]
+        group_name = "dc_pump"
+        variables = { number = "1" }
+
+    # pump 2
+    [[scheme.group]]
+        group_name = "dc_pump"
+        variables = { number = "2" }
+
+    # pump 3
+    [[scheme.group]]
+        group_name = "dc_pump"
+        variables = { number = "3" }
+
+    # dc aisle 1
+    [[scheme.group]]
+        group_name = "dc_aisle"
+        variables = { number = "1" }
+
+    # dc aisle 2
+    [[scheme.group]]
+        group_name = "dc_aisle"
+        variables = { number = "2" }
+
+    # dc aisle 3
+    [[scheme.group]]
+        group_name = "dc_aisle"
+        variables = { number = "3" }
+
+    # dc aisle 4
+    [[scheme.group]]
+        group_name = "dc_aisle"
+        variables = { number = "4" }
+
+    # dc aisle 5
+    [[scheme.group]]
+        group_name = "dc_aisle"
+        variables = { number = "5" }
+
+    # dc aisle 6
+    [[scheme.group]]
+        group_name = "dc_aisle"
+        variables = { number = "6" }

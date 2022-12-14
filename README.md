@@ -2,6 +2,17 @@
 
 SCADA Web application for visualization and control
 
+## Basic Usage
+
+All configured schemes are listed on the home page and also on the side
+navigation menu.
+
+On the scheme page you can click on elements to change their values if possible
+and also view graph with previous values.
+
+You can zoom in the graph by dragging and selecting an area you want to zoom in.
+To zoom out, double-click on the graph.
+
 ## Installing and Running
 
 To install visu and its dependencies run:

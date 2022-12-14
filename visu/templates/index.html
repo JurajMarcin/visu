@@ -13,13 +13,21 @@
         <button class="nav-button" id="nav-button"><span class="material-symbols-outlined">menu</span></button>
     </header>
 
-    <nav class="nav">
+    <nav class="nav nav--fixed">
         <ul>
             {% for scheme in schemes %}
             <li><a href="/schemes/{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</a></li>
             {% endfor %}
         </ul>
     </nav>
+
+    <main class="main">
+        <ul>
+            {% for scheme in schemes %}
+            <li><a href="/schemes/{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</a></li>
+            {% endfor %}
+        </ul>
+    </main>
 
     <script src="{{ url_for('static', path='/style.js') }}"></script>
 </body>

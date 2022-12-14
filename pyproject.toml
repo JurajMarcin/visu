@@ -28,11 +28,11 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 packages = [
     "visu",
-    "visu/data",
-    "visu/data/bacnet",
-    "visu/data/modbus",
-    "visu/data/snmp",
-    "visu/scheme",
+    "visu.data",
+    "visu.data.bacnet",
+    "visu.data.modbus",
+    "visu.data.snmp",
+    "visu.scheme",
 ]
 
 [tool.setuptools.package-data]
